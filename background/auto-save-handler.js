@@ -1,15 +1,12 @@
 // auto-save-handler.js
 // Background SW: DeepSeek cookie auth + auto-save.
-// STATUS/TOKEN are written to chrome.storage.local so the UI can read
-// them directly without sendMessage (avoids channel-closed race with index.js).
 
 import { getDeepSeekPowHeader } from './deepseek-pow.js';
 
-// ── Storage keys ───────────────────────────────────────────────────────────
-const DS_STATUS_KEY = '_dsStatus';   // {loggedIn, cookieCount, ts}
+const DS_STATUS_KEY = '_dsStatus';
 const DS_TOKEN_KEY  = 'deepseek-token';
 
-// ── Cookie helpers ────────────────────────────────────────────────────────────
+// ── Cookie helpers ─────────────────────────────────────────────────────────
 const DS_URLS = [
   'https://chat.deepseek.com',
   'https://www.deepseek.com',
@@ -38,48 +35,40 @@ async function getDeepSeekCookieStr() {
   return cookies.map(c => `${c.name}=${c.value}`).join('; ');
 }
 
-// ── Status computation + storage write ────────────────────────────────────────
+// Check whether we have a real session cookie (ds_session_id)
+async function hasSessionCookie() {
+  const cookies = await getAllDeepSeekCookies();
+  return cookies.some(c => c.name === 'ds_session_id' && c.value && c.value.length > 10);
+}
+
+// ── Status ─────────────────────────────────────────────────────────────────
 async function computeAndStoreStatus() {
   const cookies = await getAllDeepSeekCookies();
   const cookieCount = cookies.length;
   const cookieNames = cookies.map(c => c.name);
-
-  let loggedIn = cookieCount > 0;
-
-  // Fallback: cached token counts as connected
-  if (!loggedIn) {
-    try {
-      const s = await chrome.storage.local.get([DS_TOKEN_KEY]);
-      if (s[DS_TOKEN_KEY]) loggedIn = true;
-    } catch (e) { /* ignore */ }
-  }
+  // Logged in = has ds_session_id specifically
+  const loggedIn = cookies.some(c => c.name === 'ds_session_id' && c.value && c.value.length > 10);
 
   const status = { loggedIn, cookieCount, cookieNames, ts: Date.now() };
-
-  // Write to storage so UI can poll without sendMessage
   try {
     await chrome.storage.local.set({ [DS_STATUS_KEY]: status });
   } catch (e) {
-    console.warn('[DeepSeek] failed to write status to storage:', e);
+    console.warn('[DeepSeek] failed to write status:', e);
   }
-
   console.log('[DeepSeek] status stored:', loggedIn, 'cookies:', cookieNames);
   return status;
 }
 
-// ── Token extraction ────────────────────────────────────────────────────────────
+// ── Token extraction (best-effort, not required) ───────────────────────────
 async function extractAndStoreToken() {
-  // Already cached?
   try {
     const s = await chrome.storage.local.get([DS_TOKEN_KEY]);
     if (s[DS_TOKEN_KEY]) return s[DS_TOKEN_KEY];
   } catch (e) { /* ignore */ }
 
-  // Inject into open DeepSeek tab
   try {
     const tabs = await chrome.tabs.query({ url: 'https://chat.deepseek.com/*' });
     const validTabs = tabs.filter(t => t.url && t.status === 'complete');
-
     for (const tab of validTabs) {
       try {
         const results = await chrome.scripting.executeScript({
@@ -97,9 +86,7 @@ async function extractAndStoreToken() {
               try {
                 const p = JSON.parse(v);
                 const candidates = [p?.token,p?.userToken,p?.access_token,p?.data?.token,p?.data?.user?.token,p?.state?.token,p?.state?.userToken,p?.state?.user?.token];
-                for (const c of candidates) {
-                  if (c && typeof c === 'string' && c.length > 20) return c;
-                }
+                for (const c of candidates) if (c && typeof c === 'string' && c.length > 20) return c;
               } catch {}
             }
             try {
@@ -112,11 +99,6 @@ async function extractAndStoreToken() {
                   if (t && typeof t === 'string' && t.length > 20) return t;
                 } catch {}
               }
-            } catch {}
-            try {
-              const nd = window.__NEXT_DATA__;
-              const t = nd?.props?.pageProps?.user?.token||nd?.props?.initialState?.auth?.token;
-              if (t && typeof t === 'string' && t.length > 20) return t;
             } catch {}
             return null;
           },
@@ -134,11 +116,10 @@ async function extractAndStoreToken() {
   } catch (e) {
     console.warn('[DeepSeek] tab query failed:', e.message);
   }
-
   return null;
 }
 
-// ── Auto-update status when DeepSeek cookies change (login/logout) ────────
+// ── Cookie change listener ─────────────────────────────────────────────────
 chrome.cookies.onChanged.addListener(function(changeInfo) {
   const d = changeInfo?.cookie?.domain || '';
   if (d.includes('deepseek.com')) {
@@ -146,12 +127,10 @@ chrome.cookies.onChanged.addListener(function(changeInfo) {
   }
 });
 
-// Run once on SW startup to populate storage immediately
 computeAndStoreStatus().catch(() => {});
 
-// ── message handler (kept for backward compat + DEEPSEEK_CHAT etc) ────────
+// ── Message handler ────────────────────────────────────────────────────────
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-
   if (!message || !message.type) return false;
 
   if (message.type === 'SUMMARY_AUTO_DOWNLOAD' && message.text) {
@@ -218,7 +197,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   return false;
 });
 
-// ── DeepSeek chat ─────────────────────────────────────────────────────────────
+// ── DeepSeek chat ──────────────────────────────────────────────────────────
 function buildHeaders(token, cookieStr, extra = {}) {
   const h = {
     'Content-Type': 'application/json',
@@ -235,14 +214,24 @@ function buildHeaders(token, cookieStr, extra = {}) {
 }
 
 async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabled = false, search_enabled = false }) {
-  const token = await extractAndStoreToken();
-  if (!token) throw new Error('Not logged in to DeepSeek. Open https://chat.deepseek.com and log in, then click \'Check Login Status\'.');
-
+  // ── Auth: cookie-first ──────────────────────────────────────────────────
+  // DeepSeek Chat authenticates via ds_session_id (HTTP-only session cookie).
+  // A Bearer token is optional; if missing, cookie auth is sufficient.
   const cookieStr = await getDeepSeekCookieStr();
+  const hasSession = await hasSessionCookie();
+
+  if (!hasSession) {
+    throw new Error('Not logged in to DeepSeek. Please open https://chat.deepseek.com, log in, then click \'Check Login Status\'.');
+  }
+
+  // Best-effort token (enhances auth but not required)
+  const token = await extractAndStoreToken();
   const headers = buildHeaders(token, cookieStr);
 
+  // ── Create session ──────────────────────────────────────────────────────
   const sessionRes = await fetch('https://chat.deepseek.com/api/v0/chat_session/create', {
-    method: 'POST', headers, credentials: 'omit', body: JSON.stringify({}),
+    method: 'POST', headers, credentials: 'omit',
+    body: JSON.stringify({}),
   });
   if (!sessionRes.ok) {
     const t = await sessionRes.text();
@@ -250,23 +239,34 @@ async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabl
   }
   const sessionJson = await sessionRes.json();
   const sessionId = sessionJson?.data?.biz_data?.chat_session?.id || sessionJson?.data?.id || sessionJson?.id;
-  if (!sessionId) throw new Error(`No session ID: ${JSON.stringify(sessionJson).slice(0, 200)}`);
+  if (!sessionId) throw new Error(`No session ID in response: ${JSON.stringify(sessionJson).slice(0, 200)}`);
 
+  // ── PoW header (optional) ───────────────────────────────────────────────
   let powHeader = null;
   try { powHeader = await getDeepSeekPowHeader(token, cookieStr, '/api/v0/chat/completion'); } catch {}
 
   const completionHeaders = buildHeaders(token, cookieStr);
   if (powHeader) completionHeaders['x-ds-pow-response'] = powHeader;
 
+  // ── Completion ──────────────────────────────────────────────────────────
   const completionRes = await fetch('https://chat.deepseek.com/api/v0/chat/completion', {
     method: 'POST', headers: completionHeaders, credentials: 'omit',
-    body: JSON.stringify({ chat_session_id: sessionId, parent_message_id: null, model_type, prompt, ref_file_ids: [], thinking_enabled, search_enabled }),
+    body: JSON.stringify({
+      chat_session_id: sessionId,
+      parent_message_id: null,
+      model_type,
+      prompt,
+      ref_file_ids: [],
+      thinking_enabled,
+      search_enabled,
+    }),
   });
   if (!completionRes.ok) {
     const t = await completionRes.text();
     throw new Error(`Completion failed (${completionRes.status}): ${t.slice(0, 200)}`);
   }
 
+  // ── Stream parsing ──────────────────────────────────────────────────────
   const reader = completionRes.body.getReader();
   const decoder = new TextDecoder();
   let buf = '', responseText = '', thinkText = '', inThinkPhase = true, done = false;
@@ -318,7 +318,7 @@ async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabl
 chrome.storage.onChanged.addListener(function(changes, area) {
   if (area !== 'local') return;
   for (const key of Object.keys(changes)) {
-    if (key === DS_STATUS_KEY || key === DS_TOKEN_KEY) continue; // skip our own writes
+    if (key === DS_STATUS_KEY || key === DS_TOKEN_KEY) continue;
     const { oldValue, newValue } = changes[key];
     const text = extractSummaryText(newValue);
     if (text && text !== extractSummaryText(oldValue)) doDownload(text, null);
