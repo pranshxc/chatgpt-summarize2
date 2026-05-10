@@ -1,6 +1,16 @@
 import{a as w,k as v,l as x,n as P,o as N,t as jr,u as Vr}from"./chunk-XZOEFNRP.js";import{d as c,e as E,h}from"./chunk-W7D2TEGV.js";
-// xe = webextension-polyfill (correct import, was broken as `f=c(w())` = React)
-import{a as xe}from"./chunk-XZOEFNRP.js";
+
+// Storage helpers — use chrome.storage.local directly (always available in MV3).
+// Avoids xe.default vs xe shape ambiguity from the polyfill bundle entirely.
+function storageGet(keys){
+  return new Promise(r=>chrome.storage.local.get(keys,r));
+}
+function storageSet(obj){
+  return new Promise(r=>chrome.storage.local.set(obj,r));
+}
+function storageRemove(keys){
+  return new Promise(r=>chrome.storage.local.remove(keys,r));
+}
 
 async function safeJson(response){
   const ct=response.headers.get("content-type")||"";
@@ -14,11 +24,10 @@ async function safeJson(response){
   catch(e){console.error("[safeJson] JSON parse failed:",text.slice(0,300));throw new Error("Server returned invalid response")}
 }
 
-// ── Read status/token DIRECTLY from storage — no sendMessage ───────────────────
+// ── status / token ────────────────────────────────────────────────────────────
 async function getDeepSeekStatus(){
-  // Primary: read from storage (written by SW on cookie change + startup)
   try{
-    const stored=await xe.default.storage.local.get(['_dsStatus']);
+    const stored=await storageGet(['_dsStatus']);
     const s=stored['_dsStatus'];
     if(s&&typeof s.loggedIn!=='undefined'){
       console.log('[DeepSeek UI] status from storage:',s);
@@ -27,7 +36,7 @@ async function getDeepSeekStatus(){
   }catch(e){
     console.warn('[DeepSeek UI] storage read failed:',e);
   }
-  // Fallback: sendMessage (first-run before SW has written to storage)
+  // Fallback: sendMessage (before SW has written to storage)
   return new Promise((resolve)=>{
     try{
       chrome.runtime.sendMessage({type:'GET_DEEPSEEK_STATUS'},response=>{
@@ -49,7 +58,7 @@ async function getDeepSeekStatus(){
 
 async function getDeepSeekToken(){
   try{
-    const stored=await xe.default.storage.local.get(['deepseek-token']);
+    const stored=await storageGet(['deepseek-token']);
     if(stored['deepseek-token'])return stored['deepseek-token'];
   }catch(e){
     console.warn('[DeepSeek UI] token storage read failed:',e);
@@ -95,9 +104,7 @@ function R(e,t){let r=N.getConfig(t);return p(e,e?r.modelsUrl:null,r.mapModelsRe
 var a=c(E());
 var s=c(h());
 
-async function getToken(){
-  return await getDeepSeekToken();
-}
+async function getToken(){return await getDeepSeekToken();}
 
 function D({onLoginStatusChange:e,callback:t}){
   const[status,setStatus]=(0,a.useState)(null);
@@ -135,39 +142,30 @@ function D({onLoginStatusChange:e,callback:t}){
     }
   },[e,t]);
 
-  // Auto-check on mount
   (0,a.useEffect)(()=>{checkStatus();},[]);
 
-  // Watch storage for real-time login/logout updates
+  // Real-time storage watcher — updates UI when SW detects cookie change
   (0,a.useEffect)(()=>{
     function onStorageChange(changes,area){
       if(area!=='local')return;
       if(changes['_dsStatus']){
-        const s=changes['_dsStatus'].newValue;
-        if(s&&typeof s.loggedIn!=='undefined'){
-          const next={loggedIn:Boolean(s.loggedIn),cookieCount:Number(s.cookieCount)||0,error:null};
-          console.log('[DeepSeek UI] storage update detected:',next);
+        const sv=changes['_dsStatus'].newValue;
+        if(sv&&typeof sv.loggedIn!=='undefined'){
+          const next={loggedIn:Boolean(sv.loggedIn),cookieCount:Number(sv.cookieCount)||0,error:null};
+          console.log('[DeepSeek UI] storage update:',next);
           setStatus(next);
-          if(next.loggedIn){
-            Vr({provider:'deepseek-chat'}).catch(()=>{});
-            e&&e(true);
-          }else{
-            setTokenInfo(null);
-            e&&e(false);
-          }
+          if(next.loggedIn){Vr({provider:'deepseek-chat'}).catch(()=>{});e&&e(true);}
+          else{setTokenInfo(null);e&&e(false);}
         }
       }
     }
     try{chrome.storage.onChanged.addListener(onStorageChange);}catch{}
-    return()=>{
-      try{chrome.storage.onChanged.removeListener(onStorageChange);}catch{}
-    };
+    return()=>{try{chrome.storage.onChanged.removeListener(onStorageChange);}catch{}};
   },[e]);
 
   const handleDisconnect=(0,a.useCallback)(async()=>{
     try{
-      await xe.default.storage.local.remove(['deepseek-token','deepseek-login','deepseek-password','_dsStatus']);
-      // Revert provider back to web (ChatGPT)
+      await storageRemove(['deepseek-token','deepseek-login','deepseek-password','_dsStatus']);
       await Vr({provider:'web'});
     }catch{}
     setStatus({loggedIn:false,cookieCount:0});
@@ -193,8 +191,7 @@ function D({onLoginStatusChange:e,callback:t}){
           (0,s.jsx)("a",{href:"https://chat.deepseek.com",target:"_blank",rel:"noopener noreferrer",className:"underline",children:"chat.deepseek.com"}),
           " and keep a tab open so the extension can read your session token."
         ]}),
-      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",
-        children:"Provider switched to DeepSeek Chat automatically."}),
+      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",children:"Provider switched to DeepSeek Chat automatically."}),
       (0,s.jsxs)("div",{className:"flex items-center gap-2",children:[
         (0,s.jsx)("button",{type:"button",onClick:checkStatus,disabled:checking,
           className:"items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 disabled:opacity-50",
