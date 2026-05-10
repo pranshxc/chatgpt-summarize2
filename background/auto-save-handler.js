@@ -6,7 +6,7 @@ import { getDeepSeekPowHeader } from './deepseek-pow.js';
 const DS_STATUS_KEY = '_dsStatus';
 const DS_TOKEN_KEY  = 'deepseek-token';
 
-// ── Cookie helpers ─────────────────────────────────────────────────────────
+// ── Cookie helpers ──────────────────────────────────────────────
 const DS_URLS = [
   'https://chat.deepseek.com',
   'https://www.deepseek.com',
@@ -41,7 +41,7 @@ async function hasSessionCookie() {
   return cookies.some(c => c.name === 'ds_session_id' && c.value && c.value.length > 10);
 }
 
-// ── Status ─────────────────────────────────────────────────────────────────
+// ── Status ───────────────────────────────────────────────────
 async function computeAndStoreStatus() {
   const cookies = await getAllDeepSeekCookies();
   const cookieCount = cookies.length;
@@ -59,7 +59,7 @@ async function computeAndStoreStatus() {
   return status;
 }
 
-// ── Token extraction (best-effort, not required) ───────────────────────────
+// ── Token extraction (best-effort, not required) ───────────────────────
 async function extractAndStoreToken() {
   try {
     const s = await chrome.storage.local.get([DS_TOKEN_KEY]);
@@ -119,7 +119,7 @@ async function extractAndStoreToken() {
   return null;
 }
 
-// ── Cookie change listener ─────────────────────────────────────────────────
+// ── Cookie change listener ──────────────────────────────────────────────
 chrome.cookies.onChanged.addListener(function(changeInfo) {
   const d = changeInfo?.cookie?.domain || '';
   if (d.includes('deepseek.com')) {
@@ -129,7 +129,7 @@ chrome.cookies.onChanged.addListener(function(changeInfo) {
 
 computeAndStoreStatus().catch(() => {});
 
-// ── Message handler ────────────────────────────────────────────────────────
+// ── Message handler ───────────────────────────────────────────────────
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (!message || !message.type) return false;
 
@@ -197,7 +197,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   return false;
 });
 
-// ── DeepSeek chat ──────────────────────────────────────────────────────────
+// ── DeepSeek chat ─────────────────────────────────────────────────────
 function buildHeaders(token, cookieStr, extra = {}) {
   const h = {
     'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ function buildHeaders(token, cookieStr, extra = {}) {
 }
 
 async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabled = false, search_enabled = false }) {
-  // ── Auth: cookie-first ──────────────────────────────────────────────────
+  // ── Auth: cookie-first ──────────────────────────────────────────────
   // DeepSeek Chat authenticates via ds_session_id (HTTP-only session cookie).
   // A Bearer token is optional; if missing, cookie auth is sufficient.
   const cookieStr = await getDeepSeekCookieStr();
@@ -228,7 +228,7 @@ async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabl
   const token = await extractAndStoreToken();
   const headers = buildHeaders(token, cookieStr);
 
-  // ── Create session ──────────────────────────────────────────────────────
+  // ── Create session ────────────────────────────────────────────────
   const sessionRes = await fetch('https://chat.deepseek.com/api/v0/chat_session/create', {
     method: 'POST', headers, credentials: 'omit',
     body: JSON.stringify({}),
@@ -241,14 +241,14 @@ async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabl
   const sessionId = sessionJson?.data?.biz_data?.chat_session?.id || sessionJson?.data?.id || sessionJson?.id;
   if (!sessionId) throw new Error(`No session ID in response: ${JSON.stringify(sessionJson).slice(0, 200)}`);
 
-  // ── PoW header (optional) ───────────────────────────────────────────────
+  // ── PoW header (optional) ─────────────────────────────────────────────
   let powHeader = null;
   try { powHeader = await getDeepSeekPowHeader(token, cookieStr, '/api/v0/chat/completion'); } catch {}
 
   const completionHeaders = buildHeaders(token, cookieStr);
   if (powHeader) completionHeaders['x-ds-pow-response'] = powHeader;
 
-  // ── Completion ──────────────────────────────────────────────────────────
+  // ── Completion ─────────────────────────────────────────────────────
   const completionRes = await fetch('https://chat.deepseek.com/api/v0/chat/completion', {
     method: 'POST', headers: completionHeaders, credentials: 'omit',
     body: JSON.stringify({
@@ -266,7 +266,7 @@ async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabl
     throw new Error(`Completion failed (${completionRes.status}): ${t.slice(0, 200)}`);
   }
 
-  // ── Stream parsing ──────────────────────────────────────────────────────
+  // ── Stream parsing ───────────────────────────────────────────────────
   const reader = completionRes.body.getReader();
   const decoder = new TextDecoder();
   let buf = '', responseText = '', thinkText = '', inThinkPhase = true, done = false;
@@ -314,7 +314,13 @@ async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabl
   return { text: responseText.trim(), thinkText: thinkText.trim(), sessionId };
 }
 
-// ── Auto-save ──────────────────────────────────────────────────────────────
+// ── Expose deepseekChat globally for sw-entry.js fetch intercept ─────────────
+// sw-entry.js patches self.fetch BEFORE importing this file, but the actual
+// fetch calls happen at runtime (not at import time), so by the time any
+// intercepted completion request arrives, this assignment has already run.
+self.__deepseekChat = deepseekChat;
+
+// ── Auto-save ──────────────────────────────────────────────────────────
 chrome.storage.onChanged.addListener(function(changes, area) {
   if (area !== 'local') return;
   for (const key of Object.keys(changes)) {
