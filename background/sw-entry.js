@@ -9,6 +9,33 @@
 //
 // deepseek-pow.js must come before auto-save-handler.js because
 // auto-save-handler.js imports getDeepSeekPowHeader from it.
+
+// ── Response.json() empty-body guard ────────────────────────────────────────
+// DeepSeek's /api/v0/users/login returns HTTP 202 Accepted with an EMPTY body.
+// Calling .json() on an empty response throws:
+//   SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+// This patch makes .json() return null instead of throwing, so the login flow
+// can continue and pick up the session token from the cookies that are already
+// correctly captured by auto-save-handler.js.
+(function patchResponseJson() {
+  var _origJson = Response.prototype.json;
+  Response.prototype.json = function () {
+    var self = this;
+    return self.clone().text().then(function (text) {
+      if (!text || !text.trim()) {
+        console.warn('[sw-patch] Response.json(): empty body (status ' + self.status + ') — returning null.');
+        return null;
+      }
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        console.warn('[sw-patch] Response.json() parse error:', e.message, '— returning null.');
+        return null;
+      }
+    });
+  };
+})();
+
 import './deepseek-pow.js';
 import './auto-save-handler.js';
 import './index.js';
