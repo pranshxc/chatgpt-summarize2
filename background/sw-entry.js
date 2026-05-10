@@ -13,26 +13,22 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // DEEPSEEK FETCH INTERCEPT
 //
-// WHY THIS IS NEEDED:
-// index.js contains a DeepSeek provider class (ff) that drives a 3-step flow:
-//   1. POST /api/v0/users/login       → expects JSON body, gets 202 + empty body
-//   2. POST /api/v0/chat_session/create → works, returns session ID
-//   3. POST /api/v0/chat/completion   → NEVER REACHED because step 1 null
-//      propagates into createSession which then has no session ID to send
+// index.js drives a 3-step flow:
+//   1. POST /api/v0/users/login         → 202 + empty body → crash
+//   2. POST /api/v0/chat_session/create → sends fake "cookie-auth" Bearer token
+//                                          → DeepSeek returns 40003 invalid token
+//   3. POST /api/v0/chat/completion     → never reached
 //
-// auto-save-handler.js already contains a fully-working deepseekChat() that
-// handles cookies, session creation, PoW header, streaming — everything.
-// We intercept the three DeepSeek API calls that index.js makes and:
-//   - Login:      return a fake 200 OK with {"code":0,"data":{"user_id":"patched"}}
-//                 so index.js's createSession proceeds with a non-null user object
-//   - Session:    pass through normally (it works)
-//   - Completion: intercept the body, run it through deepseekChat() instead,
-//                 and return a synthetic SSE stream with the result so index.js
-//                 can parse it the same way it would a real stream
+// We own all three endpoints:
+//   1. Login:   return synthetic 200 JSON so index.js proceeds
+//   2. Session: strip index.js’s headers, rebuild with real cookies from storage,
+//               send the real request, return its real response
+//   3. Completion: skip the real network call entirely — run deepseekChat()
+//               (which does session+completion internally with real auth) and
+//               return a synthetic SSE stream that index.js can parse
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Response.json() empty-body guard ────────────────────────────────────────
-// Kept as a safety net for any other endpoint that returns an empty body.
 (function patchResponseJson() {
   Response.prototype.json = function () {
     var self = this;
@@ -55,13 +51,11 @@
 (function patchDeepSeekFetch() {
   var _origFetch = self.fetch.bind(self);
 
-  // Holds the prompt+options from the completion call so deepseekChat can use them
-  var pendingCompletionBody = null;
-
   self.fetch = async function (input, init) {
-    var url = typeof input === 'string' ? input : (input && input.url ? input.url : String(input));
+    var url = typeof input === 'string' ? input
+            : (input && input.url ? input.url : String(input));
 
-    // ── 1. Login — return a fake 200 so index.js createSession proceeds ───
+    // ── 1. Login — synthetic 200, no network call ──────────────────────────
     if (url.includes('chat.deepseek.com/api/v0/users/login')) {
       console.log('[sw-patch] Intercepted DeepSeek login — returning synthetic 200.');
       return new Response(
@@ -70,73 +64,85 @@
       );
     }
 
-    // ── 2. Session create — pass through, but capture result ─────────────
+    // ── 2. Session create — rebuild with real cookies, strip fake token ───────
     if (url.includes('chat.deepseek.com/api/v0/chat_session/create')) {
-      console.log('[sw-patch] Passing through DeepSeek session create.');
-      return _origFetch(input, init);
+      console.log('[sw-patch] Intercepted DeepSeek session create — rebuilding with real auth.');
+      try {
+        // Get real cookies from storage (set by auto-save-handler)
+        var cookieStr = await getRealCookieStr();
+        var realToken = await getRealToken();
+
+        var cleanHeaders = {
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'x-app-version': '20250101.0',
+          'x-client-platform': 'web',
+          'x-client-locale': 'en_GB',
+          'x-client-version': '20250101.0',
+        };
+        // Only set Authorization if we have a REAL token (not the fake one)
+        if (realToken && realToken !== 'cookie-auth') {
+          cleanHeaders['Authorization'] = 'Bearer ' + realToken;
+        }
+        if (cookieStr) cleanHeaders['Cookie'] = cookieStr;
+
+        return _origFetch(url, {
+          method: 'POST',
+          headers: cleanHeaders,
+          credentials: 'omit',
+          body: JSON.stringify({}),
+        });
+      } catch (err) {
+        console.error('[sw-patch] Session create rebuild failed:', err);
+        return _origFetch(input, init);
+      }
     }
 
-    // ── 3. Completion — run through deepseekChat, return SSE stream ───────
+    // ── 3. Completion — run through deepseekChat(), return synthetic SSE ─────
     if (url.includes('chat.deepseek.com/api/v0/chat/completion')) {
       console.log('[sw-patch] Intercepted DeepSeek completion — routing through deepseekChat().');
       try {
-        // Parse the body to get the prompt
         var bodyStr = (init && init.body) ? init.body : '{}';
         var bodyObj = {};
         try { bodyObj = JSON.parse(bodyStr); } catch (e) {}
-        var prompt = bodyObj.prompt || '';
-        var model_type = bodyObj.model_type || 'deepseek_v3';
-        var thinking_enabled = bodyObj.thinking_enabled || false;
-        var search_enabled = bodyObj.search_enabled || false;
 
-        // deepseekChat is defined in auto-save-handler.js which is imported
-        // before this patch runs. We call it via a globally-set reference.
-        // auto-save-handler sets self.__deepseekChat after it defines the fn.
         var chatFn = self.__deepseekChat;
         if (!chatFn) {
-          console.warn('[sw-patch] __deepseekChat not ready yet, falling through to real fetch.');
+          console.warn('[sw-patch] __deepseekChat not ready, falling through.');
           return _origFetch(input, init);
         }
 
-        var result = await chatFn({ prompt, model_type, thinking_enabled, search_enabled });
-        var text = result.text || '';
-        var thinkText = result.thinkText || '';
+        var result = await chatFn({
+          prompt: bodyObj.prompt || '',
+          model_type: bodyObj.model_type || 'deepseek_v3',
+          thinking_enabled: bodyObj.thinking_enabled || false,
+          search_enabled: bodyObj.search_enabled || false,
+        });
 
-        // Build a synthetic SSE stream that index.js can parse.
-        // index.js reads lines starting with "data:" and parses the JSON.
-        // It looks for evt.p === 'response/fragments' with APPEND + array of frags.
         var lines = [];
-        if (thinkText) {
+        if (result.thinkText) {
           lines.push('data: ' + JSON.stringify({
-            p: 'response/fragments',
-            o: 'APPEND',
-            v: [{ type: 'THINK', content: thinkText }]
+            p: 'response/fragments', o: 'APPEND',
+            v: [{ type: 'THINK', content: result.thinkText }]
           }));
           lines.push('');
         }
-        if (text) {
+        if (result.text) {
           lines.push('data: ' + JSON.stringify({
-            p: 'response/fragments',
-            o: 'APPEND',
-            v: [{ type: 'RESPONSE', content: text }]
+            p: 'response/fragments', o: 'APPEND',
+            v: [{ type: 'RESPONSE', content: result.text }]
           }));
           lines.push('');
         }
-        // Terminal event that index.js uses to detect stream end
         lines.push('data: ' + JSON.stringify({ click_behavior: 'stop' }));
         lines.push('');
-        var sseBody = lines.join('\n');
 
-        return new Response(sseBody, {
+        return new Response(lines.join('\n'), {
           status: 200,
-          headers: {
-            'Content-Type': 'text/event-stream',
-            'Transfer-Encoding': 'chunked',
-          }
+          headers: { 'Content-Type': 'text/event-stream' },
         });
       } catch (err) {
         console.error('[sw-patch] deepseekChat failed:', err);
-        // Return a 500 so index.js surfaces a real error rather than hanging
         return new Response(
           JSON.stringify({ code: -1, message: err.message }),
           { status: 500, headers: { 'Content-Type': 'application/json' } }
@@ -144,9 +150,37 @@
       }
     }
 
-    // All other requests pass through unchanged
     return _origFetch(input, init);
   };
+
+  // ── Helpers: read real auth from chrome.storage + cookies ─────────────────
+  async function getRealCookieStr() {
+    const DS_URLS = [
+      'https://chat.deepseek.com',
+      'https://www.deepseek.com',
+      'https://deepseek.com',
+    ];
+    const seen = new Map();
+    for (const url of DS_URLS) {
+      try {
+        const cookies = await chrome.cookies.getAll({ url });
+        for (const c of cookies) {
+          const key = c.name + '|' + c.domain + '|' + c.path;
+          if (!seen.has(key)) seen.set(key, c);
+        }
+      } catch (e) {}
+    }
+    const all = Array.from(seen.values());
+    if (!all.length) return null;
+    return all.map(function(c) { return c.name + '=' + c.value; }).join('; ');
+  }
+
+  async function getRealToken() {
+    try {
+      const s = await chrome.storage.local.get(['deepseek-token']);
+      return s['deepseek-token'] || null;
+    } catch (e) { return null; }
+  }
 })();
 
 import './deepseek-pow.js';
@@ -154,7 +188,6 @@ import './auto-save-handler.js';
 import './index.js';
 
 // ── MV3 Service Worker keepalive ─────────────────────────────────────────────
-// MV3 SWs are killed after ~30s of inactivity. Alarm every ~24s prevents that.
 chrome.alarms.create('sw-keepalive', { periodInMinutes: 0.4 });
 chrome.alarms.onAlarm.addListener(function (alarm) {
   if (alarm.name === 'sw-keepalive') {
