@@ -1,33 +1,14 @@
 // auto-save-handler.js
 // Background SW message handler for DeepSeek cookie-based auth + auto-save.
-//
-// Message types handled:
-//   SUMMARY_AUTO_DOWNLOAD   – download summary text as .txt
-//   GET_DEEPSEEK_COOKIES    – return raw cookie string
-//   GET_DEEPSEEK_STATUS     – check login via ds_session_id cookie
-//   GET_DEEPSEEK_TOKEN      – extract Bearer token from open deepseek tab
-//   DEEPSEEK_CHAT           – full 2-step chat: create_session -> PoW -> SSE completion
-//   DEEPSEEK_API_CALL       – generic proxied fetch (legacy)
-//   DEEPSEEK_LOGIN          – email/password login (legacy)
 
-// getDeepSeekPowHeader is provided by deepseek-pow.js which is imported
-// as a sibling ES module in sw-entry.js before this file.
-// We import it directly so this module works standalone too.
 import { getDeepSeekPowHeader } from './deepseek-pow.js';
 
 // ── Storage watcher ────────────────────────────────────────────────────────────
 chrome.storage.onChanged.addListener(function (changes, area) {
   for (const key of Object.keys(changes)) {
     const { oldValue, newValue } = changes[key];
-    const preview = typeof newValue === 'string'
-      ? newValue.slice(0, 120)
-      : (newValue && typeof newValue === 'object'
-          ? JSON.stringify(newValue).slice(0, 120)
-          : String(newValue));
-    console.log('[AutoSave][storage.onChanged]', area, 'key:', key, '| preview:', preview);
     const text = extractSummaryText(newValue);
     if (text && text !== extractSummaryText(oldValue)) {
-      console.log('[AutoSave] Detected summary in key:', key, '- triggering download');
       doDownload(text, null);
     }
   }
@@ -84,23 +65,74 @@ async function getDeepSeekCookieStr() {
 }
 
 /**
- * Login status: look for ds_session_id cookie (confirmed from network trace).
+ * Login status:
+ * Considers the user logged in if ANY cookies exist for DeepSeek domains.
+ * DeepSeek's cookie names vary across versions and regions — checking for a
+ * specific name like ds_session_id is unreliable. Any cookie presence means
+ * the browser has an active DeepSeek session.
+ *
+ * Also falls back to checking for a cached token in extension storage.
  */
 async function getDeepSeekLoginStatus() {
-  const allCookies = await chrome.cookies.getAll({ url: 'https://chat.deepseek.com' });
-  const byName = new Map(allCookies.map(c => [c.name, c.value]));
-  const sessionId = byName.get('ds_session_id') || null;
+  const urls = [
+    'https://chat.deepseek.com',
+    'https://www.deepseek.com',
+    'https://deepseek.com',
+  ];
+
+  const seen = new Map();
+  for (const url of urls) {
+    try {
+      const cookies = await chrome.cookies.getAll({ url });
+      for (const c of cookies) {
+        const key = `${c.name}|${c.domain}`;
+        if (!seen.has(key)) seen.set(key, c);
+      }
+    } catch (e) {
+      console.warn('[DeepSeek] login status cookie fetch failed for', url, e);
+    }
+  }
+
+  const allCookies = Array.from(seen.values());
+  const cookieCount = allCookies.length;
+  const cookieNames = allCookies.map(c => c.name);
+
+  // Any cookie = active browser session
+  let loggedIn = cookieCount > 0;
+
+  // Secondary: check cached token in storage (handles case where cookies
+  // are httpOnly/not readable but user has previously logged in via the extension)
+  if (!loggedIn) {
+    try {
+      const stored = await chrome.storage.local.get(['deepseek-token']);
+      if (stored['deepseek-token']) loggedIn = true;
+    } catch (e) {
+      console.warn('[DeepSeek] storage check failed:', e);
+    }
+  }
+
+  // Look for known session token cookie names for a better preview
+  const knownNames = ['ds_session_id', 'ds_session', 'userToken', 'user_token',
+    'ds_auth', 'authorization', 'NEXT_LOCALE', 'intercom-id'];
+  const sessionCookie = allCookies.find(c =>
+    knownNames.some(n => c.name.toLowerCase().includes(n.toLowerCase()))
+  ) || allCookies[0] || null;
+
+  console.log('[DeepSeek] Login status check:',
+    'cookieCount:', cookieCount,
+    'loggedIn:', loggedIn,
+    'cookieNames:', cookieNames.slice(0, 10));
+
   return {
-    loggedIn: !!sessionId,
-    cookieCount: allCookies.length,
-    sessionId: sessionId ? sessionId.slice(0, 8) + '...' : null,
-    allCookieNames: allCookies.map(c => c.name),
+    loggedIn,
+    cookieCount,
+    sessionCookieName: sessionCookie?.name || null,
+    allCookieNames: cookieNames,
   };
 }
 
 /**
  * Extract Bearer token from an open chat.deepseek.com tab via scripting injection.
- * Only injects into real https://chat.deepseek.com/* tabs (avoids browser-specific page errors).
  */
 async function getDeepSeekToken() {
   // 1. Cached token
@@ -113,7 +145,6 @@ async function getDeepSeekToken() {
   // 2. Inject into an open DeepSeek tab
   try {
     const tabs = await chrome.tabs.query({ url: 'https://chat.deepseek.com/*' });
-    // Guard: only inject into real, fully-loaded https://chat.deepseek.com pages
     const validTabs = tabs.filter(t =>
       t.url &&
       t.url.startsWith('https://chat.deepseek.com') &&
@@ -125,7 +156,7 @@ async function getDeepSeekToken() {
         const results = await chrome.scripting.executeScript({
           target: { tabId: tab.id },
           func: () => {
-            // Known direct localStorage keys
+            // Direct localStorage key search
             const directKeys = [
               'ds_user_auth', 'ds_auth', 'user_token', 'access_token',
               'auth_token', 'token', 'userToken', 'ds_token',
@@ -135,7 +166,7 @@ async function getDeepSeekToken() {
               if (v && v.length > 20 && !v.startsWith('{')) return v;
             }
 
-            // Search all localStorage JSON blobs for a token field
+            // Search all localStorage JSON blobs
             for (let i = 0; i < localStorage.length; i++) {
               const k = localStorage.key(i);
               const v = localStorage.getItem(k);
@@ -146,6 +177,7 @@ async function getDeepSeekToken() {
                   parsed?.token, parsed?.userToken, parsed?.access_token,
                   parsed?.data?.token, parsed?.data?.user?.token,
                   parsed?.state?.token, parsed?.state?.userToken,
+                  parsed?.state?.user?.token,
                 ];
                 for (const c of candidates) {
                   if (c && typeof c === 'string' && c.length > 20) return c;
@@ -156,14 +188,24 @@ async function getDeepSeekToken() {
             // Search Zustand/Redux window stores
             try {
               for (const wk of Object.keys(window)) {
-                if (!wk.startsWith('__') && !wk.toLowerCase().includes('store')) continue;
                 try {
-                  const state = window[wk]?.getState?.();
-                  const token = state?.token || state?.userToken
-                    || state?.auth?.token || state?.user?.token;
+                  const val = window[wk];
+                  if (!val || typeof val !== 'object') continue;
+                  const state = typeof val.getState === 'function' ? val.getState() : val;
+                  const token = state?.token || state?.userToken ||
+                    state?.auth?.token || state?.user?.token ||
+                    state?.currentUser?.token;
                   if (token && typeof token === 'string' && token.length > 20) return token;
                 } catch {}
               }
+            } catch {}
+
+            // Try __NEXT_DATA__
+            try {
+              const nd = window.__NEXT_DATA__;
+              const token = nd?.props?.pageProps?.user?.token ||
+                nd?.props?.initialState?.auth?.token;
+              if (token && typeof token === 'string' && token.length > 20) return token;
             } catch {}
 
             return null;
@@ -188,18 +230,14 @@ async function getDeepSeekToken() {
   return null;
 }
 
-/**
- * Build standard DeepSeek request headers.
- */
 function buildHeaders(token, cookieStr, extra = {}) {
   const h = {
     'Content-Type': 'application/json',
     'Accept': '*/*',
-    'x-app-version': '2.0.0',
+    'x-app-version': '20250101.0',
     'x-client-platform': 'web',
     'x-client-locale': 'en_GB',
-    'x-client-version': '2.0.0',
-    'x-client-timezone-offset': '19800',
+    'x-client-version': '20250101.0',
     ...extra,
   };
   if (token) h['Authorization'] = `Bearer ${token}`;
@@ -207,16 +245,9 @@ function buildHeaders(token, cookieStr, extra = {}) {
   return h;
 }
 
-/**
- * Full DeepSeek chat pipeline:
- *   1. Create session
- *   2. Solve PoW challenge
- *   3. Stream completion (SSE)
- *   4. Parse THINK + RESPONSE fragments
- */
-async function deepseekChat({ prompt, model_type = 'default', thinking_enabled = true, search_enabled = false }) {
+async function deepseekChat({ prompt, model_type = 'deepseek_v3', thinking_enabled = false, search_enabled = false }) {
   const token = await getDeepSeekToken();
-  if (!token) throw new Error('Not logged in to DeepSeek. Open https://chat.deepseek.com and log in, then try again.');
+  if (!token) throw new Error('Not logged in to DeepSeek. Open https://chat.deepseek.com and log in, then click \'Check Login Status\'.');
 
   const cookieStr = await getDeepSeekCookieStr();
   const headers = buildHeaders(token, cookieStr);
@@ -230,15 +261,15 @@ async function deepseekChat({ prompt, model_type = 'default', thinking_enabled =
     throw new Error(`Session create failed (${sessionRes.status}): ${t.slice(0, 200)}`);
   }
   const sessionJson = await sessionRes.json();
-  const sessionId = sessionJson?.data?.biz_data?.chat_session?.id;
+  const sessionId = sessionJson?.data?.biz_data?.chat_session?.id
+    || sessionJson?.data?.id
+    || sessionJson?.id;
   if (!sessionId) throw new Error(`No session ID in response: ${JSON.stringify(sessionJson).slice(0, 200)}`);
-  console.log('[DeepSeek] Session created:', sessionId);
 
   // Step 2: Solve PoW
   let powHeader = null;
   try {
     powHeader = await getDeepSeekPowHeader(token, cookieStr, '/api/v0/chat/completion');
-    console.log('[DeepSeek] PoW solved');
   } catch (powErr) {
     console.warn('[DeepSeek] PoW solve failed (proceeding without):', powErr.message);
   }
@@ -259,7 +290,6 @@ async function deepseekChat({ prompt, model_type = 'default', thinking_enabled =
       ref_file_ids: [],
       thinking_enabled,
       search_enabled,
-      preempt: false,
     }),
   });
   if (!completionRes.ok) {
@@ -273,7 +303,7 @@ async function deepseekChat({ prompt, model_type = 'default', thinking_enabled =
   let buf = '';
   let responseText = '';
   let thinkText = '';
-  let inThinkPhase = true; // first fragments are THINK, then RESPONSE
+  let inThinkPhase = true;
   let done = false;
 
   while (!done) {
@@ -292,7 +322,6 @@ async function deepseekChat({ prompt, model_type = 'default', thinking_enabled =
       let evt;
       try { evt = JSON.parse(jsonStr); } catch { continue; }
 
-      // Full fragment list (first data event)
       if (evt.v?.response?.fragments) {
         for (const frag of evt.v.response.fragments) {
           if (frag.type === 'THINK') { thinkText += frag.content || ''; inThinkPhase = true; }
@@ -300,8 +329,6 @@ async function deepseekChat({ prompt, model_type = 'default', thinking_enabled =
         }
         continue;
       }
-
-      // New fragment appended: { p: 'response/fragments', o: 'APPEND', v: [{type, content}] }
       if (evt.p === 'response/fragments' && evt.o === 'APPEND' && Array.isArray(evt.v)) {
         for (const frag of evt.v) {
           if (frag.type === 'THINK') inThinkPhase = true;
@@ -313,23 +340,17 @@ async function deepseekChat({ prompt, model_type = 'default', thinking_enabled =
         }
         continue;
       }
-
-      // Content patch: { p: 'response/fragments/-1/content', o: 'APPEND'/'SET', v: '...' }
       if (evt.p && evt.p.includes('fragments') && evt.p.includes('content') && typeof evt.v === 'string') {
         if (inThinkPhase) thinkText += evt.v;
         else responseText += evt.v;
         continue;
       }
-
-      // Shorthand content append: { v: '...' } (no p)
       if (!evt.p && typeof evt.v === 'string') {
         if (inThinkPhase) thinkText += evt.v;
         else responseText += evt.v;
         continue;
       }
-
-      // Close event
-      if (evt.click_behavior !== undefined) { done = true; }
+      if (evt.click_behavior !== undefined) done = true;
     }
   }
 
@@ -354,7 +375,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message && message.type === 'GET_DEEPSEEK_STATUS') {
     getDeepSeekLoginStatus()
       .then(status => sendResponse(status))
-      .catch(err => sendResponse({ loggedIn: false, error: err?.message }));
+      .catch(err => sendResponse({ loggedIn: false, cookieCount: 0, error: err?.message }));
     return true;
   }
 
@@ -392,39 +413,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         const text = await res.text();
         let data = null;
         try { data = text ? JSON.parse(text) : null; } catch {}
-        sendResponse({ ok: res.ok, status: res.status, data, rawText: text.slice(0, 500), contentType: res.headers.get('content-type') || '' });
+        sendResponse({ ok: res.ok, status: res.status, data, rawText: text.slice(0, 500) });
       } catch (err) {
         sendResponse({ ok: false, error: err?.message || 'DEEPSEEK_API_CALL failed' });
-      }
-    })();
-    return true;
-  }
-
-  if (message && message.type === 'DEEPSEEK_LOGIN') {
-    (async () => {
-      try {
-        const { email, password } = message;
-        const cookieStr = await getDeepSeekCookieStr();
-        const headers = buildHeaders(null, cookieStr);
-        const res = await fetch('https://chat.deepseek.com/api/v0/users/login', {
-          method: 'POST', headers, credentials: 'omit',
-          body: JSON.stringify({ email, password, mobile: '', area_code: '', device_id: '', os: 'web' }),
-        });
-        const text = await res.text();
-        let data = null;
-        try { data = text ? JSON.parse(text) : null; } catch {}
-        if (!res.ok) {
-          sendResponse({ error: data?.error || data?.detail?.message || `Login failed (${res.status})` });
-          return;
-        }
-        if (data?.data?.user?.token) {
-          await chrome.storage.local.set({ 'deepseek-token': data.data.user.token, 'deepseek-login': email, 'deepseek-password': password });
-          sendResponse({ token: data.data.user.token });
-          return;
-        }
-        sendResponse({ error: `Unexpected response: ${text.slice(0, 200)}` });
-      } catch (err) {
-        sendResponse({ error: err?.message || 'Login failed' });
       }
     })();
     return true;
@@ -448,7 +439,6 @@ function doDownload(text, sender, sendResponse) {
       lastDownloadedText = null;
       sendResponse && sendResponse({ success: false, error: chrome.runtime.lastError.message });
     } else {
-      console.log('[AutoSave] Saved:', filename, '| ID:', downloadId);
       chrome.storage.local.get(['_summaryHistory'], function (res) {
         const history = res._summaryHistory || [];
         history.unshift({ timestamp, text: text.slice(0, 500), url: (sender && sender.url) || '' });
