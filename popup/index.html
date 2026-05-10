@@ -5,6 +5,8 @@
   </head>
   <body className="p-0 m-0" style="overflow: hidden">
     <div id="app"></div>
+    <!-- runtime-patch.js MUST be first: fixes extension context, dismiss, and JSON errors -->
+    <script src="runtime-patch.js"></script>
     <script src="index.js" type="module"></script>
     <script src="auto-save.js"></script>
   </body>
