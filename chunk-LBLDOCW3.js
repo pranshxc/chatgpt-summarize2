@@ -12,7 +12,7 @@ async function safeJson(response){
   catch(e){console.error("[safeJson] JSON parse failed:",text.slice(0,300));throw new Error("Server returned invalid response")}
 }
 
-// ── Message helpers (must go through background SW) ──────────────────────────
+// ── Message helpers ───────────────────────────────────────────────────────────
 function sendBgMessage(type,extra={}){
   return new Promise((resolve)=>{
     try{
@@ -32,7 +32,19 @@ function sendBgMessage(type,extra={}){
 }
 
 function getDeepSeekCookies(){return sendBgMessage('GET_DEEPSEEK_COOKIES').then(r=>r?.cookieStr||null);}
-function getDeepSeekStatus(){return sendBgMessage('GET_DEEPSEEK_STATUS').then(r=>r||{loggedIn:false,cookieCount:0});}
+function getDeepSeekStatus(){
+  return sendBgMessage('GET_DEEPSEEK_STATUS').then(r=>{
+    console.log('[DeepSeek UI] raw GET_DEEPSEEK_STATUS response:',r);
+    // Defensive: handle null (SW didn't respond), string "true", or proper object
+    if(!r) return{loggedIn:false,cookieCount:0};
+    return{
+      loggedIn: Boolean(r.loggedIn),
+      cookieCount: Number(r.cookieCount)||0,
+      error: r.error||null,
+      sessionCookieName: r.sessionCookieName||null,
+    };
+  });
+}
 function getDeepSeekToken(){return sendBgMessage('GET_DEEPSEEK_TOKEN').then(r=>r?.token||null);}
 
 async function C(e,t){
@@ -56,28 +68,14 @@ var a=c(E()),m=c(w());
 var f=c(w());
 var s=c(h());
 
-/**
- * getToken() - returns a cached or freshly extracted Bearer token.
- * No email/password. Reads from browser session via background SW.
- */
 async function getToken(){
-  // 1. Check extension storage cache
   try{
     const stored=await f.default.storage.local.get(["deepseek-token"]);
     if(stored["deepseek-token"])return stored["deepseek-token"];
   }catch(e){console.warn('[DeepSeek] storage read failed',e);}
-  // 2. Ask background SW to extract from open DeepSeek tab
   return await getDeepSeekToken();
 }
 
-/**
- * DeepSeek status panel.
- * - Checks login by looking for ds_session_id cookie (background SW).
- * - On mount, auto-checks and fires onLoginStatusChange(true/false).
- * - "Check Login Status" re-checks and tries to extract the token.
- * - Green badge when logged in, orange when not.
- * - "Disconnect" clears only the extension's cached token.
- */
 function D({onLoginStatusChange:e,callback:t}){
   const[status,setStatus]=(0,a.useState)(null);
   const[checking,setChecking]=(0,a.useState)(false);
@@ -86,23 +84,20 @@ function D({onLoginStatusChange:e,callback:t}){
   const checkStatus=(0,a.useCallback)(async()=>{
     setChecking(true);
     try{
-      // Step 1: check cookies
       const st=await getDeepSeekStatus();
+      console.log('[DeepSeek UI] checkStatus result:',st);
       setStatus(st);
 
       if(st&&st.loggedIn){
-        // Step 2: try to get/cache the Bearer token
         const token=await getToken();
         if(token){
           setTokenInfo({found:true,preview:token.slice(0,12)+'...'});
-          // Cache it
           try{await f.default.storage.local.set({'deepseek-token':token});}catch{}
           e&&e(true);
           t&&t();
         }else{
-          // Has session cookie but token not yet extractable (tab not open)
           setTokenInfo({found:false,hint:'Open chat.deepseek.com to let the extension read your token.'});
-          e&&e(true); // still considered connected — session exists
+          e&&e(true);
         }
       }else{
         setTokenInfo(null);
@@ -117,7 +112,6 @@ function D({onLoginStatusChange:e,callback:t}){
     }
   },[e,t]);
 
-  // Auto-check on mount
   (0,a.useEffect)(()=>{checkStatus();},[]);
 
   const handleDisconnect=(0,a.useCallback)(async()=>{
@@ -127,22 +121,21 @@ function D({onLoginStatusChange:e,callback:t}){
     e&&e(false);
   },[e]);
 
-  // Loading
+  // ── Loading state ──
   if(status===null){
     return(0,s.jsxs)("div",{className:"flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400",
       children:[(0,s.jsx)(x,{style:"h-4 w-4"})," Checking DeepSeek session\u2026"]})
   }
 
+  // ── Connected ──
   if(status.loggedIn){
     return(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[
-      // Green badge
       (0,s.jsxs)("div",{className:"flex items-center gap-2 rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-2 text-green-700 dark:text-green-400",children:[
         (0,s.jsx)("span",{className:"inline-block h-2.5 w-2.5 rounded-full bg-green-500 flex-shrink-0"}),
         (0,s.jsxs)("span",{children:["Connected",status.cookieCount>0?` (${status.cookieCount} cookie${status.cookieCount!==1?'s':''})`:"",
           tokenInfo?.found?(0,s.jsxs)("span",{className:"ml-1 text-green-600 dark:text-green-300",children:[" \u2022 token ",tokenInfo.preview]}):null
         ]})
       ]}),
-      // Hint if token not yet extracted
       !tokenInfo?.found&&(0,s.jsxs)("p",{className:"text-xs text-amber-600 dark:text-amber-400",
         children:["\u26a0\ufe0f ",tokenInfo?.hint||"Open ",
           (0,s.jsx)("a",{href:"https://chat.deepseek.com",target:"_blank",rel:"noopener noreferrer",
@@ -151,11 +144,10 @@ function D({onLoginStatusChange:e,callback:t}){
         ]}),
       (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",
         children:"Your DeepSeek browser session is used automatically. No login required."}),
-      // Buttons
       (0,s.jsxs)("div",{className:"flex items-center gap-2",children:[
         (0,s.jsx)("button",{type:"button",onClick:checkStatus,disabled:checking,
           className:"items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 disabled:opacity-50",
-          children:checking?(0,s.jsx)(x,{style:"h-3.5 w-3.5"}):"↻ Refresh"}),
+          children:checking?(0,s.jsx)(x,{style:"h-3.5 w-3.5"}):"\u21bb Refresh"}),
         (0,s.jsx)("button",{type:"button",onClick:handleDisconnect,
           className:"items-center rounded-md border border-transparent bg-red-500 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700",
           children:"Disconnect"})
@@ -163,9 +155,8 @@ function D({onLoginStatusChange:e,callback:t}){
     ]})
   }
 
-  // Not logged in
+  // ── Not connected ──
   return(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[
-    // Orange badge
     (0,s.jsxs)("div",{className:"flex items-center gap-2 rounded-md bg-orange-50 dark:bg-orange-900/30 px-3 py-2 text-orange-700 dark:text-orange-400",children:[
       (0,s.jsx)("span",{className:"inline-block h-2.5 w-2.5 rounded-full bg-orange-400 flex-shrink-0"}),
       (0,s.jsx)("span",{children:"Not connected to DeepSeek"})
