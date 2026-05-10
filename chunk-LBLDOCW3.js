@@ -1,4 +1,6 @@
-import{a as w,k as v,l as x,n as P,o as N}from"./chunk-XZOEFNRP.js";import{d as c,e as E,h}from"./chunk-W7D2TEGV.js";
+import{a as w,k as v,l as x,n as P,o as N,t as jr,u as Vr}from"./chunk-XZOEFNRP.js";import{d as c,e as E,h}from"./chunk-W7D2TEGV.js";
+// xe = webextension-polyfill (correct import, was broken as `f=c(w())` = React)
+import{a as xe}from"./chunk-XZOEFNRP.js";
 
 async function safeJson(response){
   const ct=response.headers.get("content-type")||"";
@@ -13,12 +15,10 @@ async function safeJson(response){
 }
 
 // ── Read status/token DIRECTLY from storage — no sendMessage ───────────────────
-var f=c(E()); // browser polyfill
-
 async function getDeepSeekStatus(){
-  // Primary: read from storage (written by SW on every cookie change + startup)
+  // Primary: read from storage (written by SW on cookie change + startup)
   try{
-    const stored=await f.default.storage.local.get(['_dsStatus']);
+    const stored=await xe.default.storage.local.get(['_dsStatus']);
     const s=stored['_dsStatus'];
     if(s&&typeof s.loggedIn!=='undefined'){
       console.log('[DeepSeek UI] status from storage:',s);
@@ -48,14 +48,12 @@ async function getDeepSeekStatus(){
 }
 
 async function getDeepSeekToken(){
-  // Read directly from storage
   try{
-    const stored=await f.default.storage.local.get(['deepseek-token']);
+    const stored=await xe.default.storage.local.get(['deepseek-token']);
     if(stored['deepseek-token'])return stored['deepseek-token'];
   }catch(e){
     console.warn('[DeepSeek UI] token storage read failed:',e);
   }
-  // Fallback: sendMessage
   return new Promise((resolve)=>{
     try{
       chrome.runtime.sendMessage({type:'GET_DEEPSEEK_TOKEN'},response=>{
@@ -94,7 +92,7 @@ function p(e,t,r){
 
 function R(e,t){let r=N.getConfig(t);return p(e,e?r.modelsUrl:null,r.mapModelsResponse)}
 
-var a=c(E()),m=c(w());
+var a=c(E());
 var s=c(h());
 
 async function getToken(){
@@ -113,6 +111,8 @@ function D({onLoginStatusChange:e,callback:t}){
       console.log('[DeepSeek UI] checkStatus:',st);
       setStatus(st);
       if(st&&st.loggedIn){
+        // Auto-switch provider to deepseek-chat
+        try{await Vr({provider:'deepseek-chat'});}catch{}
         const token=await getToken();
         if(token){
           setTokenInfo({found:true,preview:token.slice(0,12)+'...'});
@@ -138,7 +138,7 @@ function D({onLoginStatusChange:e,callback:t}){
   // Auto-check on mount
   (0,a.useEffect)(()=>{checkStatus();},[]);
 
-  // ← NEW: also watch storage for real-time updates (cookie change → SW writes → UI reacts)
+  // Watch storage for real-time login/logout updates
   (0,a.useEffect)(()=>{
     function onStorageChange(changes,area){
       if(area!=='local')return;
@@ -148,7 +148,13 @@ function D({onLoginStatusChange:e,callback:t}){
           const next={loggedIn:Boolean(s.loggedIn),cookieCount:Number(s.cookieCount)||0,error:null};
           console.log('[DeepSeek UI] storage update detected:',next);
           setStatus(next);
-          if(next.loggedIn){e&&e(true);}else{setTokenInfo(null);e&&e(false);}
+          if(next.loggedIn){
+            Vr({provider:'deepseek-chat'}).catch(()=>{});
+            e&&e(true);
+          }else{
+            setTokenInfo(null);
+            e&&e(false);
+          }
         }
       }
     }
@@ -159,7 +165,11 @@ function D({onLoginStatusChange:e,callback:t}){
   },[e]);
 
   const handleDisconnect=(0,a.useCallback)(async()=>{
-    try{await f.default.storage.local.remove(['deepseek-token','deepseek-login','deepseek-password','_dsStatus']);}catch{}
+    try{
+      await xe.default.storage.local.remove(['deepseek-token','deepseek-login','deepseek-password','_dsStatus']);
+      // Revert provider back to web (ChatGPT)
+      await Vr({provider:'web'});
+    }catch{}
     setStatus({loggedIn:false,cookieCount:0});
     setTokenInfo(null);
     e&&e(false);
@@ -179,11 +189,12 @@ function D({onLoginStatusChange:e,callback:t}){
         ]})
       ]}),
       !tokenInfo?.found&&(0,s.jsxs)("p",{className:"text-xs text-amber-600 dark:text-amber-400",
-        children:["\u26a0\ufe0f ",tokenInfo?.hint||"Open ",
+        children:["\u26a0\ufe0f Open ",
           (0,s.jsx)("a",{href:"https://chat.deepseek.com",target:"_blank",rel:"noopener noreferrer",className:"underline",children:"chat.deepseek.com"}),
           " and keep a tab open so the extension can read your session token."
         ]}),
-      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",children:"Your DeepSeek browser session is used automatically. No login required."}),
+      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",
+        children:"Provider switched to DeepSeek Chat automatically."}),
       (0,s.jsxs)("div",{className:"flex items-center gap-2",children:[
         (0,s.jsx)("button",{type:"button",onClick:checkStatus,disabled:checking,
           className:"items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 disabled:opacity-50",
