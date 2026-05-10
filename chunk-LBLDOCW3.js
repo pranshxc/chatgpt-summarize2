@@ -12,7 +12,7 @@ async function safeJson(response){
   catch(e){console.error("[safeJson] JSON parse failed:",text.slice(0,300));throw new Error("Server returned invalid response")}
 }
 
-// Must go through background SW because chrome.cookies is only available there
+// ── Cookie helpers (must go through background SW — chrome.cookies not available in popup) ──
 function getDeepSeekCookies(){
   return new Promise(resolve=>{
     try{
@@ -26,6 +26,44 @@ function getDeepSeekCookies(){
       });
     }catch(e){
       console.warn("[DeepSeek] getDeepSeekCookies failed:",e);
+      resolve(null);
+    }
+  });
+}
+
+// Returns { loggedIn, cookieCount, allCookieNames }
+function getDeepSeekStatus(){
+  return new Promise(resolve=>{
+    try{
+      chrome.runtime.sendMessage({type:"GET_DEEPSEEK_STATUS"},response=>{
+        if(chrome.runtime.lastError){
+          console.warn("[DeepSeek] GET_DEEPSEEK_STATUS error:",chrome.runtime.lastError.message);
+          resolve({loggedIn:false,cookieCount:0});
+          return;
+        }
+        resolve(response||{loggedIn:false,cookieCount:0});
+      });
+    }catch(e){
+      console.warn("[DeepSeek] getDeepSeekStatus failed:",e);
+      resolve({loggedIn:false,cookieCount:0});
+    }
+  });
+}
+
+// Returns the bearer token from cookies/localStorage via background SW
+function getDeepSeekToken(){
+  return new Promise(resolve=>{
+    try{
+      chrome.runtime.sendMessage({type:"GET_DEEPSEEK_TOKEN"},response=>{
+        if(chrome.runtime.lastError){
+          console.warn("[DeepSeek] GET_DEEPSEEK_TOKEN error:",chrome.runtime.lastError.message);
+          resolve(null);
+          return;
+        }
+        resolve(response?.token||null);
+      });
+    }catch(e){
+      console.warn("[DeepSeek] getDeepSeekToken failed:",e);
       resolve(null);
     }
   });
@@ -48,79 +86,136 @@ function p(e,t,r){
 
 function R(e,t){let r=N.getConfig(t);return p(e,e?r.modelsUrl:null,r.mapModelsResponse)}
 
-var a=c(E()),m=c(w());var f=c(w());
+var a=c(E()),m=c(w());
+var f=c(w());
 
-async function A(e,t){
+/**
+ * A() - Returns the DeepSeek token via cookie-based auth.
+ * No email/password needed — reads from browser session.
+ * Returns { token } on success or { error } on failure.
+ */
+async function A(){
   try{
-    if(!e||!t){
-      let o=await f.default.storage.local.get({"deepseek-login":"","deepseek-password":""});
-      e=o["deepseek-login"],t=o["deepseek-password"]
+    // 1. Try to get cached token from storage
+    const stored=await f.default.storage.local.get(["deepseek-token"]);
+    if(stored["deepseek-token"]){
+      console.log("[DeepSeek] Using cached token");
+      return{token:stored["deepseek-token"]}
     }
 
-    const cookieStr=await getDeepSeekCookies();
-    console.log("[DeepSeek] cookies found:",cookieStr?"yes (length "+cookieStr.length+")":"none");
-
-    const headers={
-      "Content-Type":"application/json",
-      "Accept":"application/json",
-      "x-app-version":"20241129.1",
-      "x-client-platform":"web",
-      "x-client-locale":"en_US"
-    };
-    if(cookieStr)headers["Cookie"]=cookieStr;
-
-    let r=await fetch(P.loginUrl,{
-      method:"POST",
-      headers,
-      credentials:"omit",
-      body:JSON.stringify({email:e,password:t,mobile:"",area_code:"",device_id:"",os:"web"})
-    });
-
-    let n;
-    try{n=await safeJson(r)}
-    catch(parseErr){return{error:"Server returned an unreadable response. Please try again."}}
-
-    // Detect WAF/bot challenge: non-JSON HTML body
-    if(n&&n.__rawHtml__!==undefined){
-      return{error:"DeepSeek is blocking this request (bot protection).\n\nPlease open https://chat.deepseek.com in your browser, log in there first, then try again here."}
+    // 2. Ask background SW to extract token from cookies/localStorage
+    const token=await getDeepSeekToken();
+    if(token){
+      await f.default.storage.local.set({"deepseek-token":token});
+      return{token}
     }
 
-    // Blank body — WAF challenge with empty response
-    if(n===null){
-      if(!cookieStr){
-        return{error:"DeepSeek requires browser cookies to authenticate.\n\nPlease: 1) Open https://chat.deepseek.com in a tab, 2) Log in there, 3) Come back and try again here."}
-      }
-      return{error:`Login returned empty response (${r.status}). DeepSeek may be rate-limiting or blocking this request. Please wait a moment and try again.`}
-    }
-
-    if(!r.ok){
-      return{error:n?.error||n?.detail?.message||n?.message||`Login failed (${r.status}). Please check your credentials.`}
-    }
-
-    if(r.ok&&n?.data?.user){
-      let o=n.data.user.token;
-      await f.default.storage.local.set({"deepseek-token":o,"deepseek-login":e,"deepseek-password":t});
-      return{token:o}
-    }else{
-      console.warn("[DeepSeek] ok but unexpected response shape:",JSON.stringify(n).slice(0,300));
-      return{error:n?.error||n?.message||`Unexpected response from DeepSeek (${r.status}). Raw: `+JSON.stringify(n).slice(0,150)}
-    }
+    return{error:"Not logged in. Please open https://chat.deepseek.com and log in, then come back."}
   }catch(r){
-    return console.error("Login error",r),{error:r?.message||"An error occurred during login"}
+    return{error:r?.message||"An error occurred"}
   }
 }
 
 var s=c(h());
 
-function D({onLoginStatusChange:e,callback:t}){let[r,n]=(0,a.useState)(""),[o,d]=(0,a.useState)(""),[u,y]=(0,a.useState)(!1),[k,b]=(0,a.useState)(null),[l,g]=(0,a.useState)(!1);return(0,a.useEffect)(()=>{(async()=>{let i=await m.default.storage.local.get({"deepseek-login":"","deepseek-password":""});i["deepseek-login"]&&i["deepseek-password"]?(n(i["deepseek-login"]),d(i["deepseek-password"]),g(!0),e&&e(!0)):e&&e(!1)})()},[e]),(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[(0,s.jsxs)("div",{children:[(0,s.jsx)("label",{htmlFor:"username",className:"block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200",children:"Email"}),(0,s.jsx)("div",{className:"mt-2",children:(0,s.jsx)("input",{type:"text",name:"username",id:"username",value:r,onChange:i=>n(i.target.value),disabled:l,required:!0,className:`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm 
-              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 
-              focus:ring-inset focus:ring-primary-600 disabled:bg-gray-100 disabled:text-gray-500
-              sm:text-sm sm:leading-6`})})]}),(0,s.jsxs)("div",{children:[(0,s.jsx)("label",{htmlFor:"password",className:"block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200",children:"Password"}),(0,s.jsx)("div",{className:"mt-2",children:(0,s.jsx)("input",{type:"password",name:"password",id:"password",value:o,onChange:i=>d(i.target.value),disabled:l,required:!0,className:`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
-              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
-              focus:ring-inset focus:ring-primary-600 disabled:bg-gray-100 disabled:text-gray-500
-              sm:text-sm sm:leading-6`})})]}),k&&(0,s.jsx)("div",{className:"text-red-500 text-xs leading-snug whitespace-pre-line",children:k}),(0,s.jsxs)("div",{className:"flex items-center justify-end gap-2",children:[!l&&(0,s.jsx)("button",{type:"button",onClick:async()=>{if(l)return;y(!0),b(null);let i=await A(r,o);"token"in i?(await m.default.storage.local.set({"deepseek-login":r,"deepseek-password":o,"deepseek-token":i.token}),g(!0),e&&e(!0),t&&t()):b(i.error),y(!1)},disabled:u,className:`items-center rounded-md border border-transparent bg-primary-500
-              px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700
-              focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
-              disabled:cursor-not-allowed disabled:bg-primary-300 disabled:opacity-50`,children:u?(0,s.jsx)(x,{style:"flex h-5 w-5 items-center justify-center"}):"Login"}),l&&(0,s.jsx)("button",{type:"button",onClick:async()=>{await m.default.storage.local.remove(["deepseek-login","deepseek-password","deepseek-token"]),n(""),d(""),g(!1),e&&e(!1)},className:`items-center rounded-md border border-transparent bg-red-500
-              px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700
-              focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2`,children:"Remove Account"})]})]})}var J=D;export{R as a,J as b};
+/**
+ * DeepSeek status panel — replaces the old email/password login form.
+ * Shows:
+ *   - Green badge: logged in, how many cookies found
+ *   - Orange badge: not logged in, with a link to chat.deepseek.com
+ *   - A "Refresh Status" button
+ *   - A "Disconnect" button (clears cached token from extension storage only)
+ */
+function D({onLoginStatusChange:e,callback:t}){
+  const[status,setStatus]=(0,a.useState)(null); // null=loading, object=loaded
+  const[checking,setChecking]=(0,a.useState)(false);
+
+  const checkStatus=(0,a.useCallback)(async()=>{
+    setChecking(true);
+    try{
+      const st=await getDeepSeekStatus();
+      setStatus(st);
+      // Also try to get/cache the token if logged in
+      if(st.loggedIn){
+        const tokenResult=await A();
+        if(tokenResult.token){
+          e&&e(true);
+          t&&t();
+        }else{
+          // Has cookies but can't get token yet — still considered connected
+          e&&e(true);
+        }
+      }else{
+        e&&e(false);
+      }
+    }catch(err){
+      console.error("[DeepSeek] checkStatus error:",err);
+      setStatus({loggedIn:false,cookieCount:0,error:err?.message});
+      e&&e(false);
+    }finally{
+      setChecking(false);
+    }
+  },[e,t]);
+
+  // Check on mount
+  (0,a.useEffect)(()=>{checkStatus();},[]);
+
+  const handleDisconnect=(0,a.useCallback)(async()=>{
+    await f.default.storage.local.remove(["deepseek-token","deepseek-login","deepseek-password"]);
+    setStatus({loggedIn:false,cookieCount:0});
+    e&&e(false);
+  },[e]);
+
+  // Loading state
+  if(status===null){
+    return(0,s.jsx)("div",{className:"flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400",
+      children:[(0,s.jsx)(x,{style:"h-4 w-4"}),"Checking DeepSeek login status…"]})
+  }
+
+  if(status.loggedIn){
+    return(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[
+      // Green status badge
+      (0,s.jsxs)("div",{className:"flex items-center gap-2 rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-2 text-green-700 dark:text-green-400",children:[
+        (0,s.jsx)("span",{className:"inline-block h-2.5 w-2.5 rounded-full bg-green-500 flex-shrink-0"}),
+        (0,s.jsxs)("span",{children:["Connected to DeepSeek",status.cookieCount>0?` (${status.cookieCount} cookies found)`:""]})
+      ]}),
+      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",
+        children:"Your DeepSeek browser session is being used automatically. No login required."}),
+      // Actions row
+      (0,s.jsxs)("div",{className:"flex items-center gap-2",children:[
+        (0,s.jsx)("button",{type:"button",onClick:checkStatus,disabled:checking,
+          className:"items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50",
+          children:checking?(0,s.jsx)(x,{style:"h-3.5 w-3.5"}):"↻ Refresh"}),
+        (0,s.jsx)("button",{type:"button",onClick:handleDisconnect,
+          className:"items-center rounded-md border border-transparent bg-red-500 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-red-700",
+          children:"Disconnect"})
+      ]})
+    ]})
+  }
+
+  // Not logged in
+  return(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[
+    // Orange status badge
+    (0,s.jsxs)("div",{className:"flex items-center gap-2 rounded-md bg-orange-50 dark:bg-orange-900/30 px-3 py-2 text-orange-700 dark:text-orange-400",children:[
+      (0,s.jsx)("span",{className:"inline-block h-2.5 w-2.5 rounded-full bg-orange-400 flex-shrink-0"}),
+      (0,s.jsx)("span",{children:"Not connected to DeepSeek"})
+    ]}),
+    (0,s.jsxs)("p",{className:"text-xs text-gray-500 dark:text-gray-400",children:[
+      "To use DeepSeek, log in at ",
+      (0,s.jsx)("a",{href:"https://chat.deepseek.com",target:"_blank",rel:"noopener noreferrer",
+        className:"text-primary-600 underline hover:text-primary-800",
+        children:"chat.deepseek.com"}),
+      " in your browser. The extension will detect your session automatically."
+    ]}),
+    status.error&&(0,s.jsx)("p",{className:"text-xs text-red-500",children:status.error}),
+    // Refresh button
+    (0,s.jsx)("div",{className:"flex items-center justify-end",children:
+      (0,s.jsx)("button",{type:"button",onClick:checkStatus,disabled:checking,
+        className:"items-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50",
+        children:checking?(0,s.jsx)(x,{style:"flex h-5 w-5 items-center justify-center"}):"Check Login Status"})
+    })
+  ]})
+}
+
+var J=D;
+export{R as a,J as b};
