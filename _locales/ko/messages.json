@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT + DeepSeek을 사용하여 웹사이트 / YouTube 요약 또는 채팅. 요약 * AI 요약 * OpenAI * PDF 요약 * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "출력은 다음 템플릿을 사용해야 합니다:\n - 이모티콘 글머리 기호\n \n 제가 제공한 텍스트를 적절한 양의 간결한 글머리 기호로 요약하세요. 각 글머리 기호에 적합한 이모티콘을 선택하세요. 응답은 {{SELECTED_LANGUAGE}}로 해야 합니다. 다음 내용을 사용하세요: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "설치해 주셔서 감사합니다",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "시작하려면 이 확장 프로그램을 도구 모음에 고정하세요.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "요약할 공급자를 선택해 주세요"
+  },
+  "installSuccess": {
+    "message": "준비 완료! ChatGPT Suite를 사용하여 한 번의 클릭으로 웹페이지나 YouTube 동영상을 요약하세요! 궁금한 점이나 <a>피드백</a>이 있으시면 문의하세요. 즐거운 요약하세요!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "즐거운 요약하세요"
+  },
+  "options": {
+    "message": "옵션",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "프롬프트",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "기타",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "메모리",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "외관",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "동작",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "ChatGPT 웹앱을 구동하는 API, 무료이지만 때때로 불안정",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI 공식 API, 더 안정적이며 사용량에 따라 요금 부과",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "API 키",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "질문",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "시스템 메시지",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "모델",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "저장",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "재설정",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AI 공급자",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "로딩 중...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "더 많은 정보",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI는 때때로 보안 검사를 통과해야 합니다. 이 문제가 계속 발생하면 확장 프로그램 옵션에서 AI 공급자를 OpenAI API로 변경하세요.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "ChatGPT 응답을 기다리는 중...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "ChatGPT에서 응답을 로드하지 못했습니다",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "페이지 내용 추출 중...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "정보"
+  },
+  "tryItNow": {
+    "message": "지금 시도해보세요",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "이 확장 프로그램이 마음에 드시나요? 5성 평점을 주세요"
+  },
+  "recommendExtension": {
+    "message": "요약이 만족스러우셨나요? <a>확장 프로그램</a>을 공유해 주세요"
+  },
+  "refreshOpenAILogin": {
+    "message": "<a>chatgpt.com</a>에서 로그인하고 Cloudflare 검사를 통과하세요"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "<a>chat.deepseek.com</a>에서 로그인하고 Cloudflare 검사를 통과하세요"
+  },
+  "copy": {
+    "message": "복사",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "다시 시도",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "요약",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "채팅",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "닫기",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT 로그인됨"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT 로그인되지 않음"
+  },
+  "login": {
+    "message": "로그인"
+  },
+  "useOpenAiApi": {
+    "message": "OpenAI API 키 사용하기"
+  },
+  "originalTranscript": {
+    "message": "스크립트",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "선택된 텍스트 요약"
+  },
+  "summarizeAll": {
+    "message": "전체 요약"
+  },
+  "summarizeNextBatch": {
+    "message": "다음 일괄 처리 요약"
+  },
+  "summarized": {
+    "message": "요약됨"
+  },
+  "authenticateChatGPT": {
+    "message": "ChatGPT를 사용하여 인증해 주세요"
+  },
+  "addOpenAIKey": {
+    "message": "OpenAI API 키를 추가해 주세요"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "DeepSeek API 키를 추가해 주세요"
+  },
+  "ready": {
+    "message": "준비됨"
+  },
+  "howToObtainKey": {
+    "message": "API 키를 얻는 방법"
+  },
+  "wrongApiKey": {
+    "message": "모델을 가져올 수 없습니다. API 키를 확인해 주세요."
+  },
+  "showYoutubeButton": {
+    "message": "YouTube 요약 버튼 표시"
+  },
+  "showSummarizeButton": {
+    "message": "부동 요약 버튼 표시"
+  },
+  "summarizeFullText": {
+    "message": "항상 전체 텍스트 요약"
+  },
+  "availableAskQuestion": {
+    "message": "OpenAI API 공급자에서만 사용 가능"
+  },
+  "askQuestion": {
+    "message": "질문하기 (베타)"
+  },
+  "askQuestionIntro": {
+    "message": "안녕하세요! 🤖 이 페이지의 내용에 대한 질문에 답변해 드리겠습니다. 오늘 어떻게 도와드릴까요?"
+  },
+  "summary": {
+    "message": "요약"
+  },
+  "alertAskQuestion": {
+    "message": "이 기능에 액세스하려면 옵션 페이지에서 OpenAI API를 공급자로 선택하세요."
+  },
+  "suggestionOpenAI": {
+    "message": "더 안정적인 결과를 위해 OpenAI API를 사용하세요!"
+  },
+  "timeoutError": {
+    "message": "죄송합니다. 요약 요청이 시간 초과되었습니다. 네트워크 지연이나 높은 서비스 수요로 인해 발생할 수 있습니다. 나중에 다시 요청해 주세요."
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPT 인터페이스 (기본)"
+  },
+  "chatGPTperks": {
+    "message": "무료 및 느림"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API 키"
+  },
+  "OpenAIperks": {
+    "message": "권장, 빠름 (API 키를 여기서 받으세요"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API 키"
+  },
+  "DeepSeekAPIperks": {
+    "message": "API 키를 여기서 받으세요"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeek 채팅 인터페이스"
+  },
+  "DeepSeekChatPerks": {
+    "message": "무료 및 느림"
+  },
+  "here": {
+    "message": "여기"
+  },
+  "missingYoutubeTranscription": {
+    "message": "YouTube 동영상에 트랜스크립션이 없어 페이지 내용을 사용하여 이 요약을 제공했습니다"
+  },
+  "languageHint": {
+    "message": "언어",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "활성화하려면 {{SELECTED_LANGUAGE}}를 템플릿에 추가",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

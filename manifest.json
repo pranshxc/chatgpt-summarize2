@@ -1,0 +1,67 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "name": "__MSG_appName__",
+  "description": "__MSG_appDesc__",
+  "default_locale": "en",
+  "version": "1.9.4",
+  "manifest_version": 3,
+  "icons": {
+    "16": "logo-16.png",
+    "32": "logo-32.png",
+    "48": "logo-48.png",
+    "128": "logo-128.png"
+  },
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "contextMenus",
+    "unlimitedStorage",
+    "alarms",
+    "webRequest",
+    "downloads",
+    "cookies"
+  ],
+  "optional_host_permissions": ["file://*/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "background": {
+    "service_worker": "background/sw-entry.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": {
+      "16": "logo-16.png",
+      "32": "logo-32.png",
+      "48": "logo-48.png",
+      "128": "logo-128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content-script/index.js", "content-script/auto-save.js"],
+      "run_at": "document_idle",
+      "css": ["styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popup/index.html",
+        "./pdf.worker.js",
+        "./wasm/sha3_wasm_bg.wasm"
+      ],
+      "matches": ["http://*/*", "https://*/*", "file://*/*"],
+      "use_dynamic_url": true
+    }
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjMGDPbQS8SLCy5ILTzamzVLsBEpNdGji+RNb0kmHKkm5Wk8HUt4Eej9F6HnzJ5BtnSTDaIRBjrLXBk46XwAW+a5nYqF6euNTXPXMgnSiD789P+Iqu202nRPFzLbmuX4TMW4OSpn6x9sZw9IMlmA/HmiP5GtL2tq02ngpCkzvEq/4VTXjulvjp85KobIWlA/ni1RYehQ/3tRSgtTU0r3lkbG1tGFPtMMGhTDSC/Wgh614uKX3BjdfgCKySc/p5RkJaVc1Cgp49nqOOZAkqflzywCrbpU1XgXIhXLtnVFUoLYWBV2lSvKik17GVoldkxUoTK+ToGHOzNFh/Nm3p/De6wIDAQAB",
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": true
+  }
+}

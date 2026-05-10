@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT περίληψη ή συνομιλία με ιστοσελίδες/Youtube μέσω ChatGPT + DeepSeek. Περίληψη * AI Περίληψη * OpenAI * PDF Περίληψη * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "Η έξοδός σας θα πρέπει να χρησιμοποιεί το ακόλουθο πρότυπο:\n - Emoji κουκίδα\n \n Περιλήψτε το κείμενο που σας δίνω σε κατάλληλο αριθμό σύντομων σημείων. Επιλέξτε κατάλληλο emoji για κάθε σημείο. Η απάντησή σας θα πρέπει να είναι σε {{SELECTED_LANGUAGE}}. Χρησιμοποιήστε το ακόλουθο περιεχόμενο: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "Ευχαριστούμε για την εγκατάσταση",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "Καρφιτσώστε αυτή την επέκταση στη γραμμή εργαλείων σας για να ξεκινήσετε.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "Παρακαλώ επιλέξτε τον πάροχό σας για περίληψη"
+  },
+  "installSuccess": {
+    "message": "Έτοιμο! Περιλάβετε οποιαδήποτε ιστοσελίδα ή YouTube βίντεο με ένα κλικ χρησιμοποιώντας το ChatGPT Suite! Επικοινωνήστε μαζί μας για οποιεςδήποτε <a>ερωτήσεις ή σχόλια</a>. Καλή περίληψη!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "Καλή περίληψη"
+  },
+  "options": {
+    "message": "Επιλογές",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "Προτροπή",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "Διάφορα",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "Μνήμη",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "Εμφάνιση",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "Συμπεριφορά",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "Το API που τροφοδοτεί την εφαρμογή ChatGPT, δωρεάν, αλλά μερικές φορές ασταθές",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "Επίσημο OpenAI API, πιο σταθερό, χρέωση με χρήση",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "Κλειδί API",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "Ερώτηση",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "Μήνυμα συστήματος",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "Μοντέλο",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "Αποθήκευση",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "Επαναφορά",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "Πάροχος AI",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "Φόρτωση...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "Περισσότερες πληροφορίες",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "Το OpenAI απαιτεί τη διεξαγωγή ελέγχου ασφαλείας από καιρό σε καιρό. Αν αυτό συνεχίζει να συμβαίνει, αλλάξτε τον πάροχο AI σε OpenAI API στις επιλογές της επέκτασης.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "Αναμονή απάντησης ChatGPT...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "Αποτυχία φόρτωσης απάντησης από ChatGPT",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "Εξαγωγή περιεχομένου σελίδας...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "Πληροφορίες"
+  },
+  "tryItNow": {
+    "message": "Δοκιμάστε τωρα",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "Σας αρέσει αυτή η επέκταση; Δώστε μας 5 αστέρια"
+  },
+  "recommendExtension": {
+    "message": "με την περίληψη; Παρακαλώ κοινοποιήστε <a>την επέκταση</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "Παρακαλώ συνδεθείτε και περάστε τον έλεγχο Cloudflare στο <a>chatgpt.com</a>"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "Παρακαλώ συνδεθείτε και περάστε τον έλεγχο Cloudflare στο <a>chat.deepseek.com</a>"
+  },
+  "copy": {
+    "message": "Αντιγραφή",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "Επανάληψη",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "Περίληψη",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "Συνομιλία",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "Κλείσιμο",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "Το ChatGPT είναι συνδεδεμένο"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "Το ChatGPT δεν είναι συνδεδεμένο"
+  },
+  "login": {
+    "message": "Σύνδεση"
+  },
+  "useOpenAiApi": {
+    "message": "Χρησιμοποιήστε το OpenAI API κλειδί σας"
+  },
+  "originalTranscript": {
+    "message": "Τρανσκριπτ",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "Περίληψη επιλεγμένου κειμένου"
+  },
+  "summarizeAll": {
+    "message": "Περίληψη όλων"
+  },
+  "summarizeNextBatch": {
+    "message": "Περίληψη επόμενης ομάδας"
+  },
+  "summarized": {
+    "message": "Περιληφθείς"
+  },
+  "authenticateChatGPT": {
+    "message": "Παρακαλώ επαληθεύστε χρησιμοποιώντας το ChatGPT"
+  },
+  "addOpenAIKey": {
+    "message": "Παρακαλώ προσθέστε το OpenAI API κλειδί σας"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "Παρακαλώ προσθέστε το DeepSeek API κλειδί σας"
+  },
+  "ready": {
+    "message": "Έτοιμο"
+  },
+  "howToObtainKey": {
+    "message": "Πώς να αποκτήσετε το API κλειδί σας"
+  },
+  "wrongApiKey": {
+    "message": "Αδυναμία φόρτωσης μοντέλων. Παρακαλώ ελέγξτε το API κλειδί σας."
+  },
+  "showYoutubeButton": {
+    "message": "Εμφάνιση κουμπιού περίληψης YouTube"
+  },
+  "showSummarizeButton": {
+    "message": "Εμφάνιση αιωρούμενου κουμπιού περίληψης"
+  },
+  "summarizeFullText": {
+    "message": "Πάντα περίληψη πλήρους κειμένου"
+  },
+  "availableAskQuestion": {
+    "message": "Διαθέσιμο μόνο με τον πάροχο OpenAI API"
+  },
+  "askQuestion": {
+    "message": "Κάντε ερώτηση (Beta)"
+  },
+  "askQuestionIntro": {
+    "message": "Γεια! 🤖 Είμαι εδώ για να βοηθήσω να απαντήσω σε οποιεςδήποτε ερωτήσεις έχετε σχετικά με το περιεχόμενο αυτής της σελίδας. Πώς μπορώ να σας βοηθήσω σήμερα;"
+  },
+  "summary": {
+    "message": "Περίληψη"
+  },
+  "alertAskQuestion": {
+    "message": "Για πρόσβαση σε αυτή τη λειτουργία, παρακαλώ επιλέξτε OpenAI API ως πάροχο στη σελίδα επιλογών."
+  },
+  "suggestionOpenAI": {
+    "message": "Χρησιμοποιήστε το OpenAI API για πιο αξιόπιστα αποτελέσματα!"
+  },
+  "timeoutError": {
+    "message": "Συγνώμη, η αίτηση περίληψης έληξε. Αυτό μπορεί να συμβεί λόγω καθυστερήσεων δικτύου ή υψηλής ζήτησης υπηρεσίας. Παρακαλώ δοκιμάστε να υποβάλετε την αίτηση σας αργότερα."
+  },
+  "chatGPTwelcome": {
+    "message": "Περιβάλλον ChatGPT (Προεπιλογή)"
+  },
+  "chatGPTperks": {
+    "message": "δωρεάν και αργό"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API κλειδί"
+  },
+  "OpenAIperks": {
+    "message": "συνιστάται, γρήγορο (αποκτήστε το API κλειδί σας εδώ"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API κλειδί"
+  },
+  "DeepSeekAPIperks": {
+    "message": "αποκτήστε το API κλειδί σας εδώ"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "Περιβάλλον συνομιλίας DeepSeek"
+  },
+  "DeepSeekChatPerks": {
+    "message": "δωρεάν και αργό"
+  },
+  "here": {
+    "message": "εδώ"
+  },
+  "missingYoutubeTranscription": {
+    "message": "Λόγω έλλειψης τρανσκριπτ στο YouTube βίντεο, χρησιμοποιήθηκε το περιεχόμενο της σελίδας για την παροχή αυτής της περίληψης"
+  },
+  "languageHint": {
+    "message": "Γλώσσα",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "Προσθέστε {{SELECTED_LANGUAGE}} στο prompt",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT 总结或与网站/Youtube 聊天，使用 ChatGPT + DeepSeek。总结 * AI * OpenAI * PDF * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "你的回答应该使用以下模板：\n - 表情符号 要点\n \n 用适当数量的简洁要点总结我给你的文本。为每个要点选择合适的表情符号。你的回答应该用{{SELECTED_LANGUAGE}}。使用以下内容：{{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "感谢安装",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "将此扩展固定到工具栏以开始使用。",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "请选择您的提供商来总结"
+  },
+  "installSuccess": {
+    "message": "准备就绪！使用 ChatGPT Suite 一键总结任何网页或 Youtube 视频！如有任何<a>问题或反馈</a>请联系我们。祝您总结愉快！",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "祝您总结愉快"
+  },
+  "options": {
+    "message": "选项",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "提示",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "其他",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "内存",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "外观",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "行为",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "驱动 ChatGPT 网络应用的 API，免费，但有时不稳定",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI 官方 API，更稳定，按使用量收费",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "API 密钥",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "问题",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "系统消息",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "模型",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "保存",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "重置",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AI 提供商",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "加载中...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "更多信息",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI 需要时不时通过安全检查。如果这种情况持续发生，请在扩展选项中将 AI 提供商更改为 OpenAI API。",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "等待 ChatGPT 回应...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "无法加载 ChatGPT 的回应",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "正在提取页面内容...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "信息"
+  },
+  "tryItNow": {
+    "message": "立即尝试",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "喜欢这个扩展吗？给我们 5 星评价"
+  },
+  "recommendExtension": {
+    "message": "对总结满意吗？请分享<a>这个扩展</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "请在 <a>chatgpt.com</a> 登录并通过 Cloudflare 检查"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "请在 <a>chat.deepseek.com</a> 登录并通过 Cloudflare 检查"
+  },
+  "copy": {
+    "message": "复制",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "重试",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "总结",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "聊天",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "关闭",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT 已登录"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT 未登录"
+  },
+  "login": {
+    "message": "登录"
+  },
+  "useOpenAiApi": {
+    "message": "使用您的 OpenAI API 密钥"
+  },
+  "originalTranscript": {
+    "message": "转录",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "总结选中的文本"
+  },
+  "summarizeAll": {
+    "message": "全部总结"
+  },
+  "summarizeNextBatch": {
+    "message": "总结下一批"
+  },
+  "summarized": {
+    "message": "已总结"
+  },
+  "authenticateChatGPT": {
+    "message": "请使用 ChatGPT 进行身份验证"
+  },
+  "addOpenAIKey": {
+    "message": "请添加您的 OpenAI API 密钥"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "请添加您的 DeepSeek API 密钥"
+  },
+  "ready": {
+    "message": "准备就绪"
+  },
+  "howToObtainKey": {
+    "message": "如何获取您的 API 密钥"
+  },
+  "wrongApiKey": {
+    "message": "无法获取模型。请检查您的 API 密钥。"
+  },
+  "showYoutubeButton": {
+    "message": "显示 YouTube 总结按钮"
+  },
+  "showSummarizeButton": {
+    "message": "显示浮动总结按钮"
+  },
+  "summarizeFullText": {
+    "message": "始终总结全文"
+  },
+  "availableAskQuestion": {
+    "message": "仅适用于 OpenAI API 提供商"
+  },
+  "askQuestion": {
+    "message": "提问（测试版）"
+  },
+  "askQuestionIntro": {
+    "message": "您好！🤖 我在这里帮助回答您对此页面内容的任何问题。我今天能为您做些什么？"
+  },
+  "summary": {
+    "message": "摘要"
+  },
+  "alertAskQuestion": {
+    "message": "要访问此功能，请在选项页面中选择 OpenAI API 作为您的提供商。"
+  },
+  "suggestionOpenAI": {
+    "message": "使用 OpenAI API 获得更可靠的结果！"
+  },
+  "timeoutError": {
+    "message": "抱歉，您的总结请求超时了。这可能由于网络延迟或服务需求量大造成。请稍后再次提交您的请求。"
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPT 界面（默认）"
+  },
+  "chatGPTperks": {
+    "message": "免费且速度慢"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API 密钥"
+  },
+  "OpenAIperks": {
+    "message": "推荐，速度快（在此处获取您的 API 密钥"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API 密钥"
+  },
+  "DeepSeekAPIperks": {
+    "message": "在此处获取您的 API 密钥"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeek 聊天界面"
+  },
+  "DeepSeekChatPerks": {
+    "message": "免费且速度慢"
+  },
+  "here": {
+    "message": "此处"
+  },
+  "missingYoutubeTranscription": {
+    "message": "由于 YouTube 视频缺少转录，已使用页面内容来提供此摘要"
+  },
+  "languageHint": {
+    "message": "语言",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "添加 {{SELECTED_LANGUAGE}} 到模板以启用",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

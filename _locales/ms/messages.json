@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT meringkaskan atau bersembang dengan Laman Web / Youtube menggunakan ChatGPT + DeepSeek. Summary * AI Summarize * OpenAI * PDF Summary * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "Output anda harus menggunakan template berikut:\n - Emoji Bulletpoint\n \n Ringkaskan teks yang saya berikan kepada anda dalam jumlah titik peluru ringkas yang sesuai. Pilih emoji yang sesuai untuk setiap titik peluru. Jawapan anda harus dalam {{SELECTED_LANGUAGE}}. Gunakan kandungan berikut: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "Terima kasih kerana memasang",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "Sematkan sambungan ini pada toolbar anda untuk bermula.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "Sila pilih Penyedia anda untuk meringkaskan"
+  },
+  "installSuccess": {
+    "message": "Sedia! Ringkaskan mana-mana laman web atau video Youtube dengan satu klik menggunakan ChatGPT Suite! Hubungi kami untuk sebarang <a>soalan atau maklum balas</a>. Selamat meringkas!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "Selamat meringkas"
+  },
+  "options": {
+    "message": "Pilihan",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "Peminta",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "Lain-lain",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "Memori",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "Penampilan",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "Tingkah laku",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "API yang menjana kuasa ChatGPT webapp, percuma, tetapi kadangkala tidak stabil",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "API rasmi OpenAI, lebih stabil, caj mengikut penggunaan",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "Kunci API",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "Soalan",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "Mesej Sistem",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "Model",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "Simpan",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "Set semula",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "Penyedia AI",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "Memuatkan...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "Maklumat Lanjut",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI memerlukan lulus pemeriksaan keselamatan sekali-sekala. Jika ini terus berlaku, tukar penyedia AI kepada OpenAI API dalam pilihan sambungan.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "Menunggu jawapan ChatGPT...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "Gagal memuatkan jawapan daripada ChatGPT",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "Mengekstrak kandungan halaman...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "Maklumat"
+  },
+  "tryItNow": {
+    "message": "Cuba sekarang",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "Suka sambungan ini? Berikan kami penilaian 5 bintang"
+  },
+  "recommendExtension": {
+    "message": "dengan ringkasan? Sila kongsi <a>sambungan</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "Sila log masuk dan lulus pemeriksaan Cloudflare di <a>chatgpt.com</a>"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "Sila log masuk dan lulus pemeriksaan Cloudflare di <a>chat.deepseek.com</a>"
+  },
+  "copy": {
+    "message": "Salin",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "Cuba lagi",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "Ringkaskan",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "Sembang",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "Tutup",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT telah log masuk"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT tidak log masuk"
+  },
+  "login": {
+    "message": "Log masuk"
+  },
+  "useOpenAiApi": {
+    "message": "Gunakan Kunci OpenAI API anda"
+  },
+  "originalTranscript": {
+    "message": "Transkrip",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "Ringkaskan teks terpilih"
+  },
+  "summarizeAll": {
+    "message": "Ringkaskan semua"
+  },
+  "summarizeNextBatch": {
+    "message": "Ringkaskan kumpulan seterusnya"
+  },
+  "summarized": {
+    "message": "Diringkaskan"
+  },
+  "authenticateChatGPT": {
+    "message": "Sila sahkan menggunakan ChatGPT"
+  },
+  "addOpenAIKey": {
+    "message": "Sila tambah Kunci OpenAI API anda"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "Sila tambah Kunci DeepSeek API anda"
+  },
+  "ready": {
+    "message": "Sedia"
+  },
+  "howToObtainKey": {
+    "message": "Cara mendapatkan Kunci API anda"
+  },
+  "wrongApiKey": {
+    "message": "Tidak dapat mengambil model. Sila semak kunci API anda."
+  },
+  "showYoutubeButton": {
+    "message": "Tunjukkan butang ringkasan YouTube"
+  },
+  "showSummarizeButton": {
+    "message": "Tunjukkan butang ringkasan terapung"
+  },
+  "summarizeFullText": {
+    "message": "Sentiasa ringkaskan teks penuh"
+  },
+  "availableAskQuestion": {
+    "message": "Hanya tersedia dengan penyedia OpenAI API"
+  },
+  "askQuestion": {
+    "message": "Tanya soalan (Beta)"
+  },
+  "askQuestionIntro": {
+    "message": "Hello! 🤖 Saya di sini untuk membantu menjawab sebarang soalan yang anda ada tentang kandungan halaman ini. Bagaimana saya boleh membantu anda hari ini?"
+  },
+  "summary": {
+    "message": "Ringkasan"
+  },
+  "alertAskQuestion": {
+    "message": "Untuk mengakses ciri ini, sila pilih OpenAI API sebagai penyedia anda dalam halaman pilihan."
+  },
+  "suggestionOpenAI": {
+    "message": "Gunakan OpenAI API untuk keputusan yang lebih boleh dipercayai!"
+  },
+  "timeoutError": {
+    "message": "Maaf, permintaan ringkasan anda telah tamat tempoh. Ini boleh berlaku disebabkan kelewatan rangkaian atau permintaan perkhidmatan yang tinggi. Sila cuba hantar permintaan anda lagi nanti."
+  },
+  "chatGPTwelcome": {
+    "message": "Antara Muka ChatGPT (Lalai)"
+  },
+  "chatGPTperks": {
+    "message": "percuma & perlahan"
+  },
+  "OpenAIwelcome": {
+    "message": "Kunci OpenAI API"
+  },
+  "OpenAIperks": {
+    "message": "disyorkan, pantas (dapatkan Kunci API anda di sini"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "Kunci DeepSeek API"
+  },
+  "DeepSeekAPIperks": {
+    "message": "dapatkan Kunci API anda di sini"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "Antara Muka DeepSeek Chat"
+  },
+  "DeepSeekChatPerks": {
+    "message": "percuma & perlahan"
+  },
+  "here": {
+    "message": "di sini"
+  },
+  "missingYoutubeTranscription": {
+    "message": "Disebabkan transkrip yang hilang dalam video YouTube, kandungan halaman telah digunakan untuk memberikan ringkasan ini"
+  },
+  "languageHint": {
+    "message": "Bahasa",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "Tambahkan {{SELECTED_LANGUAGE}} ke gesaan untuk membolehkan",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

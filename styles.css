@@ -1,0 +1,32 @@
+#gpt-youtube-summarize-button {
+  background-color: #10a37f;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.3em 1em;
+  border-radius: 1.2em;
+  margin: 0 8px;
+}
+
+#gpt-youtube-summarize-button:hover {
+  background-color: #14b384;
+}
+
+#gpt-youtube-summarize-button > span {
+  padding: 0 0.5em 0 0;
+}
+
+#gpt-youtube-summarize-button > img {
+  width: 2em;
+  height: 2em;
+}
+
+@media screen and (max-width: 1300px) {
+  #gpt-youtube-summarize-button span {
+    display: none;
+  }
+}

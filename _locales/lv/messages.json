@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT vietņu un YouTube apskati ar ChatGPT + DeepSeek. Kopsavilkums * AI kopsavilkums * OpenAI * PDF kopsavilkums * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "Jūsu izvadei jāizmanto šāds veidnes:\n - Emoji punkts\n \n Sakopojiet man sniegto tekstu atbilstošā daudzumā kodolīgu punktu. Izvēlieties piemērotu emocijzīmīti katram punktam. Jūsu atbildei jābūt {{SELECTED_LANGUAGE}} valodā. Izmantojiet šo saturu: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "Paldies par uzstādīšanu",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "Piestiprināt šo paplašinājumu rīkjoslā, lai sāktu.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "Lūdzu, izvēlieties savu pakalpojumu sniedzēju, lai sakopotu"
+  },
+  "installSuccess": {
+    "message": "Gatavs! Sakopojiet jebkuru tīmekļa lapu vai YouTube video ar vienu klikšķi, izmantojot ChatGPT komplektu! Sazinieties ar mums jebkuru <a>jautājumu vai atsauksmju</a> gadījumā. Laimīga sakopošana!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "Laimīga sakopošana"
+  },
+  "options": {
+    "message": "Iespējas",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "Uzvedne",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "Dažādi",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "Atmiņa",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "Izskats",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "Uzvedība",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "API, kas darbina ChatGPT tīmekļa lietotni, bezmaksas, bet dažkārt nestabils",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI oficiālais API, stabilāks, maksa par izmantošanu",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "API atslēga",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "Jautājums",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "Sistēmas ziņojums",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "Modelis",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "Saglabāt",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "Atiestatīt",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AI sniedzējs",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "Ielāde...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "Vairāk informācijas",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI ir jāiziet drošības pārbaude reizēm. Ja tas turpinās, mainiet AI sniedzēju uz OpenAI API paplašinājuma iestatījumos.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "Gaida ChatGPT atbildi...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "Neizdevās ielādēt atbildi no ChatGPT",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "Izvilkt lapas saturu...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "Informācija"
+  },
+  "tryItNow": {
+    "message": "Izmēģiniet to tūlīt",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "Patīk šis paplašinājums? Novērtējiet mūs ar 5 zvaigznītēm"
+  },
+  "recommendExtension": {
+    "message": "ar kopsavilkumu? Lūdzu, dalieties <a>paplašinājumā</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "Lūdzu, ieejiet un izpildiet Cloudflare pārbaudi <a>chatgpt.com</a>"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "Lūdzu, ieejiet un izpildiet Cloudflare pārbaudi <a>chat.deepseek.com</a>"
+  },
+  "copy": {
+    "message": "Kopēt",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "Mēģināt vēlreiz",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "Sakopot",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "Čats",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "Aizvērt",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT ielogojies"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT nav ielogojies"
+  },
+  "login": {
+    "message": "Ieiet"
+  },
+  "useOpenAiApi": {
+    "message": "Izmantojiet savu OpenAI API atslēgu"
+  },
+  "originalTranscript": {
+    "message": "Transkripcija",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "Sakopot izvēlēto tekstu"
+  },
+  "summarizeAll": {
+    "message": "Sakopot visu"
+  },
+  "summarizeNextBatch": {
+    "message": "Sakopot nākamo partiju"
+  },
+  "summarized": {
+    "message": "Sakopots"
+  },
+  "authenticateChatGPT": {
+    "message": "Lūdzu, autentificējieties, izmantojot ChatGPT"
+  },
+  "addOpenAIKey": {
+    "message": "Lūdzu, pievienojiet savu OpenAI API atslēgu"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "Lūdzu, pievienojiet savu DeepSeek API atslēgu"
+  },
+  "ready": {
+    "message": "Gatavs"
+  },
+  "howToObtainKey": {
+    "message": "Kā iegūt API atslēgu"
+  },
+  "wrongApiKey": {
+    "message": "Nevarēja iegūt modeļus. Lūdzu, pārbaudiet savu API atslēgu."
+  },
+  "showYoutubeButton": {
+    "message": "Rādīt YouTube kopsavilkuma pogu"
+  },
+  "showSummarizeButton": {
+    "message": "Rādīt peldošo kopsavilkuma pogu"
+  },
+  "summarizeFullText": {
+    "message": "Vienmēr sakopot pilnu tekstu"
+  },
+  "availableAskQuestion": {
+    "message": "Pieejams tikai ar OpenAI API sniedzēju"
+  },
+  "askQuestion": {
+    "message": "Uzdot jautājumu (Beta)"
+  },
+  "askQuestionIntro": {
+    "message": "Sveiki! 🤖 Es esmu šeit, lai palīdzētu atbildēt uz jebkuru jautājumu par šīs lapas saturu. Kā es varu jums palīdzēt šodien?"
+  },
+  "summary": {
+    "message": "Kopsavilkums"
+  },
+  "alertAskQuestion": {
+    "message": "Lai piekļūtu šai funkcijai, lūdzu, izvēlieties OpenAI API kā savu sniedzēju iespēju lapā."
+  },
+  "suggestionOpenAI": {
+    "message": "Izmantojiet OpenAI API ticamākiem rezultātiem!"
+  },
+  "timeoutError": {
+    "message": "Atvainojiet, jūsu kopsavilkuma pieprasījums ir beidzies. Tas var notikt tīkla aizkavju vai liela pakalpojuma pieprasījuma dēļ. Lūdzu, mēģiniet iesniegt pieprasījumu vēlāk."
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPT saskarne (noklusējuma)"
+  },
+  "chatGPTperks": {
+    "message": "bezmaksas un lēns"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API atslēga"
+  },
+  "OpenAIperks": {
+    "message": "ieteicams, ātrs (iegūstiet savu API atslēgu šeit"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API atslēga"
+  },
+  "DeepSeekAPIperks": {
+    "message": "iegūstiet savu API atslēgu šeit"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeek tērzēšanas saskarne"
+  },
+  "DeepSeekChatPerks": {
+    "message": "bezmaksas un lēns"
+  },
+  "here": {
+    "message": "šeit"
+  },
+  "missingYoutubeTranscription": {
+    "message": "YouTube video trūkstošas transkripcijas dēļ tika izmantots lapas saturs, lai sniegtu šo kopsavilkumu"
+  },
+  "languageHint": {
+    "message": "Valoda",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "Pievienojiet {{SELECTED_LANGUAGE}} uzvednē, lai iespējotu",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

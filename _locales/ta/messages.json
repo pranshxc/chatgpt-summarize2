@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT + DeepSeek பயன்படுத்தி வலைத்தளங்கள் / Youtube சுருக்கம் அல்லது அரட்டை. Summary * AI Summarize * OpenAI * PDF Summary * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "உங்கள் வெளியீடு பின்வரும் டெம்ப்ளேட்டைப் பயன்படுத்த வேண்டும்:\n - Emoji Bulletpoint\n \n நான் உங்களுக்கு கொடுத்த உரையை சரியான எண்ணிக்கையில் சுருக்கமான புள்ளி பட்டியலில் சுருக்கவும். ஒவ்வொரு புள்ளி பட்டியலுக்கும் பொருத்தமான ஈமோஜியைத் தேர்ந்தெடுக்கவும். உங்கள் பதில் {{SELECTED_LANGUAGE}}ல் இருக்க வேண்டும். இந்த உள்ளடக்கத்தைப் பயன்படுத்தவும்: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "நிறுவனத்திற்கு நன்றி",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "தொடங்க இந்த நீட்டிப்பை உங்கள் கருவிப்பட்டியில் பின் செய்யவும்.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "சுருக்கம் செய்ய உங்கள் வழங்குநரைத் தேர்ந்தெடுக்கவும்"
+  },
+  "installSuccess": {
+    "message": "தயார்! ChatGPT Suite ஐப் பயன்படுத்தி ஒரே கிளிக்கில் எந்த வலைப்பக்கம் அல்லது Youtube வீடியோவையும் சுருக்கவும்! ஏதேனும் <a>கேள்விகள் அல்லது கருத்துக்கள்</a>க்கு எங்களை தொடர்பு கொள்ளவும். மகிழ்ச்சியாக சுருக்குங்கள்!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "மகிழ்ச்சியான சுருக்கம்"
+  },
+  "options": {
+    "message": "விருப்பங்கள்",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "ப்ராம்ப்ட்",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "பல்வேறு",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "நினைவகம்",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "தோற்றம்",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "நடத்தை",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "ChatGPT webapp ஐ இயக்கும் API, இலவசம், ஆனால் சில நேரங்களில் நிலையற்றது",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI அதிகாரப்பூர்வ API, அதிக நிலையான, பயன்பாட்டின் அடிப்படையில் கட்டணம்",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "API கீ",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "கேள்வி",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "அமைப்பு செய்தி",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "மாதிரி",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "சேமிக்கவும்",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "மீட்டமைக்கவும்",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AI வழங்குநர்",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "ஏற்றுகிறது...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "கூடுதல் தகவல்",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI அவ்வப்போது பாதுகாப்பு சோதனையை நிறைவேற்ற வேண்டும். இது தொடர்ந்தால், நீட்டிப்பு விருப்பங்களில் AI வழங்குநரை OpenAI API க்கு மாற்றவும்.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "ChatGPT பதிலுக்காக காத்திருக்கிறது...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "ChatGPT இலிருந்து பதிலை ஏற்ற முடியவில்லை",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "பக்க உள்ளடக்கத்தைப் பிரித்தெடுக்கிறது...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "தகவல்"
+  },
+  "tryItNow": {
+    "message": "இப்போது முயற்சிக்கவும்",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "இந்த நீட்டிப்பை விரும்புகிறீர்களா? எங்களுக்கு 5-ஸ்டார் மதிப்பீடு கொடுங்கள்"
+  },
+  "recommendExtension": {
+    "message": "சுருக்கத்துடன்? தயவுசெய்து <a>நீட்டிப்பைப்</a> பகிரவும்"
+  },
+  "refreshOpenAILogin": {
+    "message": "தயவுசெய்து <a>chatgpt.com</a> இல் உள்நுழைந்து Cloudflare சரிபார்ப்பை நிறைவேற்றவும்"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "தயவுசெய்து <a>chat.deepseek.com</a> இல் உள்நுழைந்து Cloudflare சரிபார்ப்பை நிறைவேற்றவும்"
+  },
+  "copy": {
+    "message": "நகலெடுக்கவும்",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "மீண்டும் முயற்சிக்கவும்",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "சுருக்கம்",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "அரட்டை",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "மூடு",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT உள்நுழைந்தது"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT உள்நுழையவில்லை"
+  },
+  "login": {
+    "message": "உள்நுழைய"
+  },
+  "useOpenAiApi": {
+    "message": "உங்கள் OpenAI API கீயைப் பயன்படுத்தவும்"
+  },
+  "originalTranscript": {
+    "message": "டிரான்ஸ்கிரிப்ட்",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "தேர்ந்தெடுத்த உரையைச் சுருக்கவும்"
+  },
+  "summarizeAll": {
+    "message": "அனைத்தையும் சுருக்கவும்"
+  },
+  "summarizeNextBatch": {
+    "message": "அடுத்த தொகுதியைச் சுருக்கவும்"
+  },
+  "summarized": {
+    "message": "சுருக்கப்பட்டது"
+  },
+  "authenticateChatGPT": {
+    "message": "தயவுசெய்து ChatGPT ஐப் பயன்படுத்தி அங்கீகரிக்கவும்"
+  },
+  "addOpenAIKey": {
+    "message": "தயவுசெய்து உங்கள் OpenAI API கீயைச் சேர்க்கவும்"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "தயவுசெய்து உங்கள் DeepSeek API கீயைச் சேர்க்கவும்"
+  },
+  "ready": {
+    "message": "தயார்"
+  },
+  "howToObtainKey": {
+    "message": "உங்கள் API கீ எவ்வாறு பெறுவது"
+  },
+  "wrongApiKey": {
+    "message": "மாடல்களைப் பெற முடியவில்லை. தயவுசெய்து உங்கள் API கீயை சரிபார்க்கவும்."
+  },
+  "showYoutubeButton": {
+    "message": "YouTube சுருக்க பொத்தானைக் காண்பிக்கவும்"
+  },
+  "showSummarizeButton": {
+    "message": "மிதக்கும் சுருக்க பொத்தானைக் காண்பிக்கவும்"
+  },
+  "summarizeFullText": {
+    "message": "எப்போதும் முழு உரையைச் சுருக்கவும்"
+  },
+  "availableAskQuestion": {
+    "message": "OpenAI API வழங்குநருடன் மட்டுமே கிடைக்கும்"
+  },
+  "askQuestion": {
+    "message": "கேள்வி கேளுங்கள் (பீட்டா)"
+  },
+  "askQuestionIntro": {
+    "message": "வணக்கம்! 🤖 இந்தப் பக்கத்தின் உள்ளடக்கம் பற்றி உங்களுக்கு உள்ள எந்தக் கேள்விகளுக்கும் பதில் அளிக்க நான் இங்கே இருக்கிறேன். இன்று நான் உங்களுக்கு எவ்வாறு உதவ முடியும்?"
+  },
+  "summary": {
+    "message": "சுருக்கம்"
+  },
+  "alertAskQuestion": {
+    "message": "இந்த அம்சத்தை அணுக, தயவுசெய்து விருப்பத்தேர்வுகள் பக்கத்தில் உங்கள் வழங்குநராக OpenAI API ஐ தேர்ந்தெடுக்கவும்."
+  },
+  "suggestionOpenAI": {
+    "message": "மிகவும் நம்பகமான முடிவுகளுக்கு OpenAI API ஐப் பயன்படுத்தவும்!"
+  },
+  "timeoutError": {
+    "message": "மன்னிக்கவும், உங்கள் சுருக்க கோரிக்கை காலாவதியானது. நெட்வொர்க் தாமதம் அல்லது அதிக சேவை தேவை காரணமாக இது நிகழலாம். தயவுசெய்து பிற்பாடு உங்கள் கோரிக்கையை மீண்டும் சமர்ப்பிக்க முயற்சிக்கவும்."
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPT இடைமுகம் (இயல்புநிலை)"
+  },
+  "chatGPTperks": {
+    "message": "இலவசம் மற்றும் மெதுவானது"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API கீ"
+  },
+  "OpenAIperks": {
+    "message": "பரிந்துரைக்கப்பட்டது, வேகமானது (உங்கள் API கீயை இங்கே பெறவும்"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API கீ"
+  },
+  "DeepSeekAPIperks": {
+    "message": "உங்கள் API கீயை இங்கே பெறவும்"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeek அரட்டை இடைமுகம்"
+  },
+  "DeepSeekChatPerks": {
+    "message": "இலவசம் மற்றும் மெதுவானது"
+  },
+  "here": {
+    "message": "இங்கே"
+  },
+  "missingYoutubeTranscription": {
+    "message": "YouTube வீடியோவில் டிரான்ஸ்கிரிப்ஷன் இல்லாததால், இந்த சுருக்கத்தை வழங்க பக்க உள்ளடக்கம் பயன்படுத்தப்பட்டது"
+  },
+  "languageHint": {
+    "message": "மொழி",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "இயக்க {{SELECTED_LANGUAGE}} ஐ ப்ராம்ப்டில் சேர்க்கவும்",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

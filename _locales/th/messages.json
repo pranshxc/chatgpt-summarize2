@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT สรุปหรือแชทกับเว็บไซต์/YouTube โดยใช้ ChatGPT + DeepSeek. Summary * AI Summarize * OpenAI * PDF Summary * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "ผลลัพธ์ของคุณควรใช้เทมเพลตต่อไปนี้:\n - Emoji Bulletpoint\n \n สรุปข้อความที่ฉันให้คุณในจำนวนจุดย่อยที่กระชับเหมาะสม เลือกอีโมจิที่เหมาะสมสำหรับทุกจุดย่อย การตอบกลับของคุณควรเป็น {{SELECTED_LANGUAGE}} ใช้เนื้อหาต่อไปนี้: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "ขอบคุณสำหรับการติดตั้ง",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "ปักหมุดส่วนขยายนี้ไว้ที่แถบเครื่องมือของคุณเพื่อเริ่มต้น",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "กรุณาเลือกผู้ให้บริการของคุณเพื่อสรุป"
+  },
+  "installSuccess": {
+    "message": "พร้อมแล้ว! สรุปเว็บเพจหรือวิดีโอ YouTube ใดๆ ด้วยการคลิกเดียวโดยใช้ ChatGPT Suite! ติดต่อเราสำหรับ<a>คำถามหรือความคิดเห็น</a>ใดๆ ขอให้สรุปอย่างมีความสุข!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "สรุปอย่างมีความสุข"
+  },
+  "options": {
+    "message": "ตัวเลือก",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "พรอมต์",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "เบ็ดเตล็ด",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "หน่วยความจำ",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "รูปลักษณ์",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "พฤติกรรม",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "API ที่ขับเคลื่อน ChatGPT webapp ฟรี แต่บางครั้งไม่เสถียร",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI API อย่างเป็นทางการ เสถียรกว่า คิดค่าบริการตามการใช้งาน",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "คีย์ API",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "คำถาม",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "ข้อความระบบ",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "โมเดล",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "บันทึก",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "รีเซ็ต",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "ผู้ให้บริการ AI",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "กำลังโหลด...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "ข้อมูลเพิ่มเติม",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI ต้องการให้ผ่านการตรวจสอบความปลอดภัยเป็นครั้งคราว หากสิ่งนี้ยังคงเกิดขึ้น ให้เปลี่ยนผู้ให้บริการ AI เป็น OpenAI API ในตัวเลือกส่วนขยาย",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "กำลังรอการตอบสนองจาก ChatGPT...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "ไม่สามารถโหลดการตอบสนองจาก ChatGPT",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "กำลังแยกเนื้อหาหน้า...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "ข้อมูล"
+  },
+  "tryItNow": {
+    "message": "ลองตอนนี้",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "ชอบส่วนขยายนี้หรือไม่? ให้คะแนน 5 ดาวแก่เรา"
+  },
+  "recommendExtension": {
+    "message": "กับการสรุป? กรุณาแชร์<a>ส่วนขยาย</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "กรุณาเข้าสู่ระบบและผ่านการตรวจสอบ Cloudflare ที่ <a>chatgpt.com</a>"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "กรุณาเข้าสู่ระบบและผ่านการตรวจสอบ Cloudflare ที่ <a>chat.deepseek.com</a>"
+  },
+  "copy": {
+    "message": "คัดลอก",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "ลองใหม่",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "สรุป",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "แชท",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "ปิด",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "เข้าสู่ระบบ ChatGPT แล้ว"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ไม่ได้เข้าสู่ระบบ ChatGPT"
+  },
+  "login": {
+    "message": "เข้าสู่ระบบ"
+  },
+  "useOpenAiApi": {
+    "message": "ใช้คีย์ OpenAI API ของคุณ"
+  },
+  "originalTranscript": {
+    "message": "ต้นฉบับ",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "สรุปข้อความที่เลือก"
+  },
+  "summarizeAll": {
+    "message": "สรุปทั้งหมด"
+  },
+  "summarizeNextBatch": {
+    "message": "สรุปชุดถัดไป"
+  },
+  "summarized": {
+    "message": "สรุปแล้ว"
+  },
+  "authenticateChatGPT": {
+    "message": "กรุณายืนยันตัวตนโดยใช้ ChatGPT"
+  },
+  "addOpenAIKey": {
+    "message": "กรุณาเพิ่มคีย์ OpenAI API ของคุณ"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "กรุณาเพิ่มคีย์ DeepSeek API ของคุณ"
+  },
+  "ready": {
+    "message": "พร้อม"
+  },
+  "howToObtainKey": {
+    "message": "วิธีการได้รับคีย์ API ของคุณ"
+  },
+  "wrongApiKey": {
+    "message": "ไม่สามารถดึงโมเดล กรุณาตรวจสอบคีย์ API ของคุณ"
+  },
+  "showYoutubeButton": {
+    "message": "แสดงปุ่มสรุป YouTube"
+  },
+  "showSummarizeButton": {
+    "message": "แสดงปุ่มสรุปลอยตัว"
+  },
+  "summarizeFullText": {
+    "message": "สรุปข้อความทั้งหมดเสมอ"
+  },
+  "availableAskQuestion": {
+    "message": "ใช้ได้เฉพาะกับผู้ให้บริการ OpenAI API เท่านั้น"
+  },
+  "askQuestion": {
+    "message": "ถามคำถาม (เบต้า)"
+  },
+  "askQuestionIntro": {
+    "message": "สวัสดี! 🤖 ฉันอยู่ที่นี่เพื่อช่วยตอบคำถามใดๆ ที่คุณมีเกี่ยวกับเนื้อหาของหน้านี้ ฉันสามารถช่วยคุณได้อย่างไรในวันนี้?"
+  },
+  "summary": {
+    "message": "สรุป"
+  },
+  "alertAskQuestion": {
+    "message": "เพื่อเข้าถึงฟีเจอร์นี้ กรุณาเลือก OpenAI API เป็นผู้ให้บริการของคุณในหน้าตัวเลือก"
+  },
+  "suggestionOpenAI": {
+    "message": "ใช้ OpenAI API เพื่อผลลัพธ์ที่เชื่อถือได้มากขึ้น!"
+  },
+  "timeoutError": {
+    "message": "ขออภัย คำขอสรุปของคุณหมดเวลา อาจเกิดขึ้นเนื่องจากความล่าช้าของเครือข่ายหรือความต้องการบริการสูง กรุณาลองส่งคำขอของคุณอีกครั้งในภายหลัง"
+  },
+  "chatGPTwelcome": {
+    "message": "อินเทอร์เฟซ ChatGPT (ค่าเริ่มต้น)"
+  },
+  "chatGPTperks": {
+    "message": "ฟรีและช้า"
+  },
+  "OpenAIwelcome": {
+    "message": "คีย์ OpenAI API"
+  },
+  "OpenAIperks": {
+    "message": "แนะนำ รวดเร็ว (รับคีย์ API ของคุณที่นี่"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "คีย์ DeepSeek API"
+  },
+  "DeepSeekAPIperks": {
+    "message": "รับคีย์ API ของคุณที่นี่"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "อินเทอร์เฟซ DeepSeek Chat"
+  },
+  "DeepSeekChatPerks": {
+    "message": "ฟรีและช้า"
+  },
+  "here": {
+    "message": "ที่นี่"
+  },
+  "missingYoutubeTranscription": {
+    "message": "เนื่องจากไม่มีการถอดเสียงใน YouTube วิดีโอ จึงใช้เนื้อหาของหน้าเพื่อให้การสรุปนี้"
+  },
+  "languageHint": {
+    "message": "ภาษา",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "เพิ่ม {{SELECTED_LANGUAGE}} ในพรอมต์เพื่อเปิดใช้งาน",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

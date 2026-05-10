@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT + DeepSeekを使用してWebサイト/Youtubeでチャットしたり要約します。要約 * AI * OpenAI * PDF * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "あなたの回答は以下のテンプレートを使用してください：\n - 絵文字 箇条書きポイント\n \n 適切な量の簡潔なポイントで私が提供するテキストを要約してください。各ポイントに適切な絵文字を選んでください。あなたの回答は{{SELECTED_LANGUAGE}}である必要があります。以下のコンテンツを使用してください：{{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "インストールしていただきありがとうございます",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "始めるには、この拡張機能をツールバーに固定してください。",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "要約するプロバイダーを選択してください"
+  },
+  "installSuccess": {
+    "message": "準備完了！ChatGPT Suiteを使用してワンクリックで任意のWebページやYoutube動画を要約できます！<a>質問やフィードバック</a>がございましたらお問い合わせください。楽しい要約を！",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "楽しい要約を"
+  },
+  "options": {
+    "message": "オプション",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "プロンプト",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "その他",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "メモリ",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "外観",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "動作",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "ChatGPT Webアプリを動かすAPI、無料ですが時々不安定",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI公式API、より安定、使用量で課金",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "APIキー",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "質問",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "システムメッセージ",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "モデル",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "保存",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "リセット",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AIプロバイダー",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "読み込み中...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "詳細情報",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAIは時々セキュリティチェックを通す必要があります。これが続く場合は、拡張機能のオプションでAIプロバイダーをOpenAI APIに変更してください。",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "ChatGPTの応答を待っています...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "ChatGPTからの応答の読み込みに失敗しました",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "ページコンテンツを抽出しています...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "情報"
+  },
+  "tryItNow": {
+    "message": "今すぐ試す",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "この拡張機能を気に入りましたか？5つ星の評価をお願いします"
+  },
+  "recommendExtension": {
+    "message": "要約はいかがでしたか？<a>拡張機能</a>をシェアしてください"
+  },
+  "refreshOpenAILogin": {
+    "message": "<a>chatgpt.com</a>でログインしてCloudflareチェックを通過してください"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "<a>chat.deepseek.com</a>でログインしてCloudflareチェックを通過してください"
+  },
+  "copy": {
+    "message": "コピー",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "再試行",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "要約",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "チャット",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "閉じる",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPTにログインしています"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPTにログインしていません"
+  },
+  "login": {
+    "message": "ログイン"
+  },
+  "useOpenAiApi": {
+    "message": "OpenAI APIキーを使用する"
+  },
+  "originalTranscript": {
+    "message": "文字起こし",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "選択されたテキストを要約"
+  },
+  "summarizeAll": {
+    "message": "すべて要約"
+  },
+  "summarizeNextBatch": {
+    "message": "次のバッチを要約"
+  },
+  "summarized": {
+    "message": "要約済み"
+  },
+  "authenticateChatGPT": {
+    "message": "ChatGPTを使用して認証してください"
+  },
+  "addOpenAIKey": {
+    "message": "OpenAI APIキーを追加してください"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "DeepSeek APIキーを追加してください"
+  },
+  "ready": {
+    "message": "準備完了"
+  },
+  "howToObtainKey": {
+    "message": "APIキーの取得方法"
+  },
+  "wrongApiKey": {
+    "message": "モデルを取得できませんでした。APIキーを確認してください。"
+  },
+  "showYoutubeButton": {
+    "message": "YouTube要約ボタンを表示"
+  },
+  "showSummarizeButton": {
+    "message": "フローティング要約ボタンを表示"
+  },
+  "summarizeFullText": {
+    "message": "常にフルテキストを要約"
+  },
+  "availableAskQuestion": {
+    "message": "OpenAI APIプロバイダーでのみ利用可能"
+  },
+  "askQuestion": {
+    "message": "質問する（ベータ）"
+  },
+  "askQuestionIntro": {
+    "message": "こんにちは！🤖 このページのコンテンツに関する質問にお答えします。今日はどのようにお手伝いできますか？"
+  },
+  "summary": {
+    "message": "要約"
+  },
+  "alertAskQuestion": {
+    "message": "この機能にアクセスするには、オプションページでプロバイダーとしてOpenAI APIを選択してください。"
+  },
+  "suggestionOpenAI": {
+    "message": "より信頼性の高い結果を得るためにOpenAI APIを使用してください！"
+  },
+  "timeoutError": {
+    "message": "申し訳ございません。要約リクエストがタイムアウトしました。これは、ネットワークの遅延やサービスの高い需要により発生する可能性があります。後でもう一度リクエストを送信してください。"
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPTインターフェース（デフォルト）"
+  },
+  "chatGPTperks": {
+    "message": "無料で遅い"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI APIキー"
+  },
+  "OpenAIperks": {
+    "message": "推奨、高速（APIキーをこちらで取得"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek APIキー"
+  },
+  "DeepSeekAPIperks": {
+    "message": "APIキーをこちらで取得"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeekチャットインターフェース"
+  },
+  "DeepSeekChatPerks": {
+    "message": "無料で遅い"
+  },
+  "here": {
+    "message": "こちら"
+  },
+  "missingYoutubeTranscription": {
+    "message": "YouTubeビデオに文字起こしがないため、この要約を提供するためにページコンテンツが使用されました"
+  },
+  "languageHint": {
+    "message": "言語",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "有効にするため{{SELECTED_LANGUAGE}}をテンプレートに追加",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

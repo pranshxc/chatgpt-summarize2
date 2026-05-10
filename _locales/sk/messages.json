@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT sumarizuje alebo chatuje s webstránkami/YouTube pomocou ChatGPT + DeepSeek. Súhrn * AI súhrn * OpenAI * PDF súhrn * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "Váš výstup by mal používať nasledujúcu šablónu:\n - Emoji bod\n \n Sumarizujte text, ktorý vám dám, do primeraného počtu stručných bodov. Vyberte vhodné emoji pre každý bod. Vaša odpoveď by mala byť v {{SELECTED_LANGUAGE}}. Použite nasledujúci obsah: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "Ďakujeme za inštaláciu",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "Pripnite toto rozšírenie do panelu nástrojov a začnite.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "Prosím, vyberte vášho poskytovateľa na sumarizáciu"
+  },
+  "installSuccess": {
+    "message": "Pripravené! Sumarizujte akúkoľvek webstránku alebo YouTube video jedným kliknutím pomocou ChatGPT Suite! Kontaktujte nás pre akékoľvek <a>otázky alebo spätnú väzbu</a>. Šťastné sumarizovanie!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "Šťastné sumarizovanie"
+  },
+  "options": {
+    "message": "Možnosti",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "Výzva",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "Rôzne",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "Pamäť",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "Vzhľad",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "Správanie",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "API, ktoré poháňa ChatGPT webovú aplikáciu, zadarmo, ale niekedy nestabilné",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "Oficiálne OpenAI API, stabilnejšie, spoplatené podľa využitia",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "API kľúč",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "Otázka",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "Systémová správa",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "Model",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "Uložiť",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "Resetovať",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AI poskytovateľ",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "Načítava sa...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "Viac informácií",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI vyžaduje občas prejdenie bezpečnostnou kontrolou. Ak sa to stále deje, zmeňte AI poskytovateľa na OpenAI API v nastaveniach rozšírenia.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "Čaká sa na odpoveď ChatGPT...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "Nepodarilo sa načítať odpoveď od ChatGPT",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "Extrakcia obsahu stránky...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "Informácie"
+  },
+  "tryItNow": {
+    "message": "Vyskúšajte to teraz",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "Páči sa vám toto rozšírenie? Ohodnoťte nás 5 hviezdičkami"
+  },
+  "recommendExtension": {
+    "message": "s týmto súhrnom? Prosím, zdieľajte <a>rozšírenie</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "Prosím, prihláste sa a prejdite Cloudflare kontrolu na <a>chatgpt.com</a>"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "Prosím, prihláste sa a prejdite Cloudflare kontrolu na <a>chat.deepseek.com</a>"
+  },
+  "copy": {
+    "message": "Kopírovať",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "Skúsiť znova",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "Sumarizovať",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "Chat",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "Zavrieť",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT prihlásený"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT neprihlásený"
+  },
+  "login": {
+    "message": "Prihlásenie"
+  },
+  "useOpenAiApi": {
+    "message": "Použite váš OpenAI API kľúč"
+  },
+  "originalTranscript": {
+    "message": "Prepis",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "Sumarizovať označený text"
+  },
+  "summarizeAll": {
+    "message": "Sumarizovať všetko"
+  },
+  "summarizeNextBatch": {
+    "message": "Sumarizovať ďalšiu dávku"
+  },
+  "summarized": {
+    "message": "Sumarizované"
+  },
+  "authenticateChatGPT": {
+    "message": "Prosím, autentifikujte sa pomocou ChatGPT"
+  },
+  "addOpenAIKey": {
+    "message": "Prosím, pridajte váš OpenAI API kľúč"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "Prosím, pridajte váš DeepSeek API kľúč"
+  },
+  "ready": {
+    "message": "Pripravené"
+  },
+  "howToObtainKey": {
+    "message": "Ako získať váš API kľúč"
+  },
+  "wrongApiKey": {
+    "message": "Nepodarilo sa načítať modely. Prosím, skontrolujte váš API kľúč."
+  },
+  "showYoutubeButton": {
+    "message": "Zobraziť YouTube sumarizačné tlačidlo"
+  },
+  "showSummarizeButton": {
+    "message": "Zobraziť plávajúce sumarizačné tlačidlo"
+  },
+  "summarizeFullText": {
+    "message": "Vždy sumarizovať celý text"
+  },
+  "availableAskQuestion": {
+    "message": "Dostupné iba s OpenAI API poskytovateľom"
+  },
+  "askQuestion": {
+    "message": "Opýtať sa otázku (Beta)"
+  },
+  "askQuestionIntro": {
+    "message": "Ahoj! 🤖 Som tu, aby som pomohol odpovedať na akékoľvek otázky o obsahu tejto stránky. Ako vám môžem dnes pomôcť?"
+  },
+  "summary": {
+    "message": "Súhrn"
+  },
+  "alertAskQuestion": {
+    "message": "Pre prístup k tejto funkcii, prosím, vyberte OpenAI API ako vášho poskytovateľa na stránke možností."
+  },
+  "suggestionOpenAI": {
+    "message": "Použite OpenAI API pre spoľahlivejšie výsledky!"
+  },
+  "timeoutError": {
+    "message": "Prepáčte, vaša žiadosť o sumarizáciu vypršala. Môže sa to stať kvôli oneskoreniam siete alebo vysokému dopytu po službe. Prosím, skúste odoslať žiadosť neskôr."
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPT rozhranie (predvolené)"
+  },
+  "chatGPTperks": {
+    "message": "zadarmo a pomalé"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API kľúč"
+  },
+  "OpenAIperks": {
+    "message": "odporúčané, rýchle (získajte váš API kľúč priamo"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API kľúč"
+  },
+  "DeepSeekAPIperks": {
+    "message": "získajte váš API kľúč priamo"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeek Chat rozhranie"
+  },
+  "DeepSeekChatPerks": {
+    "message": "zadarmo a pomalé"
+  },
+  "here": {
+    "message": "tu"
+  },
+  "missingYoutubeTranscription": {
+    "message": "Kvôli chýbajúcemu prepisu vo videu YouTube bol na poskytnutie tohto súhrnu použitý obsah stránky"
+  },
+  "languageHint": {
+    "message": "Jazyk",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "Pridáte {{SELECTED_LANGUAGE}} do výzvy pre povolenie",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

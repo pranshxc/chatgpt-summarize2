@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "ChatGPT + DeepSeek ഉപയോഗിച്ച് വെബ്‌സൈറ്റുകൾ / Youtube സംഗ്രഹിക്കുക അല്ലെങ്കിൽ ചാറ്റ് ചെയ്യുക. Summary * AI Summarize * OpenAI * PDF Summary * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "നിങ്ങളുടെ ഔട്ട്‌പുട്ട് ഈ ടെംപ്ലേറ്റ് ഉപയോഗിക്കണം:\n - Emoji Bulletpoint\n \n ഞാൻ നിങ്ങൾക്ക് നൽകിയ ടെക്‌സ്റ്റ് ഉചിതമായ എണ്ണം സംക്ഷിപ്ത ബുള്ളറ്റ് പോയിന്റുകളിൽ സംഗ്രഹിക്കുക. ഓരോ ബുള്ളറ്റ് പോയിന്റിനും അനുയോജ്യമായ ഇമോജി തിരഞ്ഞെടുക്കുക. നിങ്ങളുടെ പ്രതികരണം {{SELECTED_LANGUAGE}}ൽ ആയിരിക്കണം. ഈ ഉള്ളടക്കം ഉപയോഗിക്കുക: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "ഇൻസ്റ്റാൾ ചെയ്തതിന് നന്ദി",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "ആരംഭിക്കുന്നതിന് ഈ എക്‌സ്റ്റൻഷൻ നിങ്ങളുടെ ടൂൾബാറിൽ പിൻ ചെയ്യുക.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "സംഗ്രഹിക്കാൻ നിങ്ങളുടെ പ്രൊവൈഡർ തിരഞ്ഞെടുക്കുക"
+  },
+  "installSuccess": {
+    "message": "തയ്യാർ! ChatGPT Suite ഉപയോഗിച്ച് ഒരു ക്ലിക്കിൽ ഏതെങ്കിലും വെബ്‌പേജ് അല്ലെങ്കിൽ Youtube വീഡിയോ സംഗ്രഹിക്കുക! ഏതെങ്കിലും <a>ചോദ്യങ്ങളോ ഫീഡ്‌ബാക്കോ</a> ഉണ്ടെങ്കിൽ ഞങ്ങളെ ബന്ധപ്പെടുക. സന്തോഷത്തോടെ സംഗ്രഹിക്കുക!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "സന്തോഷത്തോടെ സംഗ്രഹിക്കുക"
+  },
+  "options": {
+    "message": "ഓപ്ഷനുകൾ",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "പ്രോംപ്റ്റ്",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "മറ്റുള്ളവ",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "മെമ്മറി",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "രൂപം",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "പെരുമാറ്റം",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "ChatGPT webapp-നെ ശക്തിപ്പെടുത്തുന്ന API, സൗജന്യ, എന്നാൽ ചിലപ്പോൾ അസ്ഥിരം",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "OpenAI ഔദ്യോഗിക API, കൂടുതൽ സ്ഥിരത, ഉപയോഗത്തിൻ്റെ അടിസ്ഥാനത്തിൽ ചാർജ്",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "API കീ",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "ചോദ്യം",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "സിസ്റ്റം സന്ദേശം",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "മോഡൽ",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "സേവ് ചെയ്യുക",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "റീസെറ്റ് ചെയ്യുക",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "AI പ്രൊവൈഡർ",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "ലോഡ് ചെയ്യുന്നു...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "കൂടുതൽ വിവരങ്ങൾ",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI-ക്ക് ഇടയ്ക്കിടെ സുരക്ഷാ പരിശോധന പാസ് ചെയ്യേണ്ടതുണ്ട്. ഇത് തുടരുകയാണെങ്കിൽ, എക്‌സ്റ്റൻഷൻ ഓപ്ഷനുകളിൽ AI പ്രൊവൈഡർ OpenAI API-യിലേക്ക് മാറ്റുക.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "ChatGPT പ്രതികരണത്തിനായി കാത്തിരിക്കുന്നു...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "ChatGPT-യിൽ നിന്ന് പ്രതികരണം ലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "പേജ് ഉള്ളടക്കം എക്‌സ്ട്രാക്റ്റ് ചെയ്യുന്നു...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "വിവരം"
+  },
+  "tryItNow": {
+    "message": "ഇപ്പോൾ പരീക്ഷിക്കുക",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "ഈ എക്‌സ്റ്റൻഷൻ ഇഷ്ടപ്പെട്ടോ? ഞങ്ങൾക്ക് 5-സ്റ്റാർ റേറ്റിംഗ് നൽകുക"
+  },
+  "recommendExtension": {
+    "message": "സംഗ്രഹത്തോടൊപ്പം? ദയവായി <a>എക്‌സ്റ്റൻഷൻ</a> പങ്കിടുക"
+  },
+  "refreshOpenAILogin": {
+    "message": "ദയവായി <a>chatgpt.com</a>-ൽ ലോഗിൻ ചെയ്ത് Cloudflare പരിശോധന പാസ് ചെയ്യുക"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "ദയവായി <a>chat.deepseek.com</a>-ൽ ലോഗിൻ ചെയ്ത് Cloudflare പരിശോധന പാസ് ചെയ്യുക"
+  },
+  "copy": {
+    "message": "കോപ്പി ചെയ്യുക",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "വീണ്ടും ശ്രമിക്കുക",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "സംഗ്രഹിക്കുക",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "ചാറ്റ്",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "അടയ്ക്കുക",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT ലോഗിൻ ചെയ്തു"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT ലോഗിൻ ചെയ്തിട്ടില്ല"
+  },
+  "login": {
+    "message": "ലോഗിൻ"
+  },
+  "useOpenAiApi": {
+    "message": "നിങ്ങളുടെ OpenAI API കീ ഉപയോഗിക്കുക"
+  },
+  "originalTranscript": {
+    "message": "ട്രാൻസ്ക്രിപ്റ്റ്",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "തിരഞ്ഞെടുത്ത ടെക്‌സ്റ്റ് സംഗ്രഹിക്കുക"
+  },
+  "summarizeAll": {
+    "message": "എല്ലാം സംഗ്രഹിക്കുക"
+  },
+  "summarizeNextBatch": {
+    "message": "അടുത്ത ബാച്ച് സംഗ്രഹിക്കുക"
+  },
+  "summarized": {
+    "message": "സംഗ്രഹിച്ചു"
+  },
+  "authenticateChatGPT": {
+    "message": "ദയവായി ChatGPT ഉപയോഗിച്ച് ആധീകാരികത സ്ഥിരീകരിക്കുക"
+  },
+  "addOpenAIKey": {
+    "message": "ദയവായി നിങ്ങളുടെ OpenAI API കീ ചേർക്കുക"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "ദയവായി നിങ്ങളുടെ DeepSeek API കീ ചേർക്കുക"
+  },
+  "ready": {
+    "message": "തയ്യാർ"
+  },
+  "howToObtainKey": {
+    "message": "നിങ്ങളുടെ API കീ എങ്ങനെ നേടാം"
+  },
+  "wrongApiKey": {
+    "message": "മോഡലുകൾ ലഭിക്കാൻ കഴിഞ്ഞില്ല. ദയവായി നിങ്ങളുടെ API കീ പരിശോധിക്കുക."
+  },
+  "showYoutubeButton": {
+    "message": "YouTube സംഗ്രഹ ബട്ടൺ കാണിക്കുക"
+  },
+  "showSummarizeButton": {
+    "message": "ഫ്ലോട്ടിംഗ് സംഗ്രഹ ബട്ടൺ കാണിക്കുക"
+  },
+  "summarizeFullText": {
+    "message": "എല്ലായ്പ്പോഴും പൂർണ്ണ ടെക്‌സ്റ്റ് സംഗ്രഹിക്കുക"
+  },
+  "availableAskQuestion": {
+    "message": "OpenAI API പ്രൊവൈഡറിൽ മാത്രം ലഭ്യം"
+  },
+  "askQuestion": {
+    "message": "ചോദ്യം ചോദിക്കുക (ബീറ്റ)"
+  },
+  "askQuestionIntro": {
+    "message": "ഹലോ! 🤖 ഈ പേജിൻ്റെ ഉള്ളടക്കത്തെക്കുറിച്ച് നിങ്ങൾക്കുള്ള ഏതെങ്കിലും ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകാൻ ഞാൻ ഇവിടെയുണ്ട്. ഇന്ന് ഞാൻ നിങ്ങളെ എങ്ങനെ സഹായിക്കാൻ കഴിയും?"
+  },
+  "summary": {
+    "message": "സംഗ്രഹം"
+  },
+  "alertAskQuestion": {
+    "message": "ഈ ഫീച്ചർ ആക്‌സസ് ചെയ്യാൻ, ഓപ്ഷൻ പേജിൽ നിങ്ങളുടെ പ്രൊവൈഡറായി OpenAI API തിരഞ്ഞെടുക്കുക."
+  },
+  "suggestionOpenAI": {
+    "message": "കൂടുതൽ വിശ്വസനീയമായ ഫലങ്ങൾക്കായി OpenAI API ഉപയോഗിക്കുക!"
+  },
+  "timeoutError": {
+    "message": "ക്ഷമിക്കണം, നിങ്ങളുടെ സംഗ്രഹ അഭ്യർത്ഥന സമയപരിധി കഴിഞ്ഞു. നെറ്റ്‌വർക്ക് കാലതാമസം അല്ലെങ്കിൽ ഉയർന്ന സേവന ആവശ്യം കാരണം ഇത് സംഭവിക്കാം. ദയവായി പിന്നീട് നിങ്ങളുടെ അഭ്യർത്ഥന വീണ്ടും സബ്മിറ്റ് ചെയ്യാൻ ശ്രമിക്കുക."
+  },
+  "chatGPTwelcome": {
+    "message": "ChatGPT ഇന്റർഫേസ് (ഡിഫോൾട്ട്)"
+  },
+  "chatGPTperks": {
+    "message": "സൗജന്യവും മന്ദവും"
+  },
+  "OpenAIwelcome": {
+    "message": "OpenAI API കീ"
+  },
+  "OpenAIperks": {
+    "message": "ശുപാർശ ചെയ്യുന്നത്, വേഗത്തിൽ (നിങ്ങളുടെ API കീ ഇവിടെ നേടുക"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "DeepSeek API കീ"
+  },
+  "DeepSeekAPIperks": {
+    "message": "നിങ്ങളുടെ API കീ ഇവിടെ നേടുക"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "DeepSeek ചാറ്റ് ഇന്റർഫേസ്"
+  },
+  "DeepSeekChatPerks": {
+    "message": "സൗജന്യവും മന്ദവും"
+  },
+  "here": {
+    "message": "ഇവിടെ"
+  },
+  "missingYoutubeTranscription": {
+    "message": "YouTube വീഡിയോയിൽ ട്രാൻസ്ക്രിപ്ഷൻ നഷ്ടപ്പെട്ടതിനാൽ, ഈ സംഗ്രഹം നൽകാൻ പേജ് ഉള്ളടക്കം ഉപയോഗിച്ചിരിക്കുന്നു"
+  },
+  "languageHint": {
+    "message": "ഭാഷ",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "{{SELECTED_LANGUAGE}} പ്രോംപ്റ്റിൽ ചേർക്കുക",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}

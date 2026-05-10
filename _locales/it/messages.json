@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "ChatGPT Summarize",
+    "description": "The name of the web-extension (45)"
+  },
+  "appDesc": {
+    "message": "Riassunto ChatGPT o chatta con siti web/Youtube usando ChatGPT + DeepSeek. Riassunto * IA * OpenAI * PDF * Claude",
+    "description": "The descirption of the web-extension (132)"
+  },
+  "defaultQuestion": {
+    "message": "La tua risposta deve utilizzare il seguente template:\n - Emoji Punto elenco\n \n Riassumi il testo che ti fornisco in una quantità appropriata di punti concisi. Scegli un emoji appropriato per ogni punto. La tua risposta deve essere in {{SELECTED_LANGUAGE}}. Utilizza il seguente contenuto: {{CONTENT}}",
+    "description": "The default question used for ChatGPT"
+  },
+  "defaultSystemMessage": {
+    "message": "",
+    "description": "The default System Message used for ChatGPT"
+  },
+  "thankYouForInstalling": {
+    "message": "Grazie per aver installato",
+    "description": "Thank you message after installing the extension"
+  },
+  "pinExtensionTutorial": {
+    "message": "Fissa questa estensione alla tua barra degli strumenti per iniziare.",
+    "description": "Tutorial message for pinning the extension to the toolbar"
+  },
+  "selectProviderToSummarize": {
+    "message": "Per favore scegli il tuo Provider per riassumere"
+  },
+  "installSuccess": {
+    "message": "Pronto! Riassumi qualsiasi pagina web o video di Youtube con un clic usando ChatGPT Suite! Contattaci per qualsiasi <a>domanda o feedback</a>. Buon riassunto!",
+    "description": "Success message after installing the extension"
+  },
+  "happySumarize": {
+    "message": "Buon riassunto"
+  },
+  "options": {
+    "message": "Opzioni",
+    "description": "Used for opening the extension options"
+  },
+  "prompt": {
+    "message": "Prompt",
+    "description": "Used for describing the prompt settings section"
+  },
+  "misc": {
+    "message": "Varie",
+    "description": "Used for describing the misc settings section"
+  },
+  "memory": {
+    "message": "Memoria",
+    "description": "Used for describing the memory settings section"
+  },
+  "appearance": {
+    "message": "Aspetto",
+    "description": "Used for describing the appearance settings section"
+  },
+  "behaviour": {
+    "message": "Comportamento",
+    "description": "Used for describing the behaviour settings section"
+  },
+  "chatGPTProviderDescription": {
+    "message": "L'API che alimenta l'app web ChatGPT, gratuita, ma a volte instabile",
+    "description": "Description of the ChatGPT API Provider"
+  },
+  "openAIProviderDescription": {
+    "message": "API ufficiale di OpenAI, più stabile, addebita per utilizzo",
+    "description": "Description of the OpenAI API Provider"
+  },
+  "apiKey": {
+    "message": "Chiave API",
+    "description": "Used for selecting the API Key"
+  },
+  "question": {
+    "message": "Domanda",
+    "description": "Used for selecting the question"
+  },
+  "systemMessage": {
+    "message": "Messaggio di Sistema",
+    "description": "Used for selecting the System Message"
+  },
+  "model": {
+    "message": "Modello",
+    "description": "Used for selecting the model"
+  },
+  "save": {
+    "message": "Salva",
+    "description": "Used for saving the extension options"
+  },
+  "reset": {
+    "message": "Ripristina",
+    "description": "Used for resetting the extension options"
+  },
+  "aiProvider": {
+    "message": "Provider IA",
+    "description": "Used for selecting the AI provider"
+  },
+  "loading": {
+    "message": "Caricamento...",
+    "description": "Status message used when loading"
+  },
+  "moreInfo": {
+    "message": "Più Info",
+    "description": "Used for opening a new modal with more info"
+  },
+  "requestOpenAIProvider": {
+    "message": "OpenAI richiede di superare un controllo di sicurezza di tanto in tanto. Se questo continua, cambia il provider IA in API OpenAI nelle opzioni dell'estensione.",
+    "description": "Status message when failed to load response from OpenAI second time in a row"
+  },
+  "waitingForChatGPTResponse": {
+    "message": "In attesa della risposta di ChatGPT...",
+    "description": "Status message used when waiting for ChatGPT response"
+  },
+  "failedToLoadResponseFromChatGPT": {
+    "message": "Impossibile caricare la risposta da ChatGPT",
+    "description": "Status message used when failed to load response from ChatGPT"
+  },
+  "extractingPageContent": {
+    "message": "Estrazione contenuto pagina...",
+    "description": "Status message used when extracting page content"
+  },
+  "info": {
+    "message": "Info"
+  },
+  "tryItNow": {
+    "message": "Prova ora",
+    "description": "Action button used after successful installation"
+  },
+  "rateExtensionInWebstore": {
+    "message": "Ti piace questa estensione? Dacci una valutazione a 5 stelle"
+  },
+  "recommendExtension": {
+    "message": "con il riassunto? Per favore condividi <a>l'estensione</a>"
+  },
+  "refreshOpenAILogin": {
+    "message": "Per favore accedi e supera il controllo Cloudflare su <a>chatgpt.com</a>"
+  },
+  "refreshDeepSeekChatLogin": {
+    "message": "Per favore accedi e supera il controllo Cloudflare su <a>chat.deepseek.com</a>"
+  },
+  "copy": {
+    "message": "Copia",
+    "description": "Used for copying text to clipboard"
+  },
+  "retry": {
+    "message": "Riprova",
+    "description": "Used invalidating a ChatGPT answer"
+  },
+  "summarize": {
+    "message": "Riassumi",
+    "description": "Tab label"
+  },
+  "chat": {
+    "message": "Chat",
+    "description": "Tab label"
+  },
+  "close": {
+    "message": "Chiudi",
+    "description": "Used for closing the extension popup"
+  },
+  "chatgptLoggedIn": {
+    "message": "ChatGPT connesso"
+  },
+  "chatgptNotLoggedIn": {
+    "message": "ChatGPT non connesso"
+  },
+  "login": {
+    "message": "Accedi"
+  },
+  "useOpenAiApi": {
+    "message": "Usa la tua Chiave API OpenAI"
+  },
+  "originalTranscript": {
+    "message": "Trascrizione",
+    "description": "Tab label"
+  },
+  "summarizeText": {
+    "message": "Riassumi testo selezionato"
+  },
+  "summarizeAll": {
+    "message": "Riassumi tutto"
+  },
+  "summarizeNextBatch": {
+    "message": "Riassumi prossimo gruppo"
+  },
+  "summarized": {
+    "message": "Riassunto"
+  },
+  "authenticateChatGPT": {
+    "message": "Per favore Autenticati usando ChatGPT"
+  },
+  "addOpenAIKey": {
+    "message": "Per favore aggiungi la tua Chiave API OpenAI"
+  },
+  "addDeepSeekAPIKey": {
+    "message": "Per favore aggiungi la tua Chiave API DeepSeek"
+  },
+  "ready": {
+    "message": "Pronto"
+  },
+  "howToObtainKey": {
+    "message": "Come ottenere la tua Chiave API"
+  },
+  "wrongApiKey": {
+    "message": "Impossibile recuperare i modelli. Per favore controlla la tua chiave API."
+  },
+  "showYoutubeButton": {
+    "message": "Mostra pulsante riassunto YouTube"
+  },
+  "showSummarizeButton": {
+    "message": "Mostra pulsante flottante riassunto"
+  },
+  "summarizeFullText": {
+    "message": "Riassumi sempre testo completo"
+  },
+  "availableAskQuestion": {
+    "message": "Disponibile solo con il provider API OpenAI"
+  },
+  "askQuestion": {
+    "message": "Fai una domanda (Beta)"
+  },
+  "askQuestionIntro": {
+    "message": "Ciao! 🤖 Sono qui per aiutarti a rispondere a qualsiasi domanda tu abbia sul contenuto di questa pagina. Come posso assisterti oggi?"
+  },
+  "summary": {
+    "message": "Riassunto"
+  },
+  "alertAskQuestion": {
+    "message": "Per accedere a questa funzione, per favore seleziona API OpenAI come tuo provider nella pagina delle opzioni."
+  },
+  "suggestionOpenAI": {
+    "message": "Usa l'API OpenAI per risultati più affidabili!"
+  },
+  "timeoutError": {
+    "message": "Spiacente, la tua richiesta di riassunto è scaduta. Questo può verificarsi a causa di ritardi di rete o alta domanda del servizio. Per favore prova a inviare nuovamente la tua richiesta più tardi."
+  },
+  "chatGPTwelcome": {
+    "message": "Interfaccia ChatGPT (Predefinito)"
+  },
+  "chatGPTperks": {
+    "message": "gratuito e lento"
+  },
+  "OpenAIwelcome": {
+    "message": "Chiave API OpenAI"
+  },
+  "OpenAIperks": {
+    "message": "raccomandato, veloce (ottieni la tua Chiave API qui"
+  },
+  "DeepSeekAPIwelcome": {
+    "message": "Chiave API DeepSeek"
+  },
+  "DeepSeekAPIperks": {
+    "message": "ottieni la tua Chiave API qui"
+  },
+  "DeepSeekChatWelcome": {
+    "message": "Interfaccia Chat DeepSeek"
+  },
+  "DeepSeekChatPerks": {
+    "message": "gratuito e lento"
+  },
+  "here": {
+    "message": "qui"
+  },
+  "missingYoutubeTranscription": {
+    "message": "A causa della mancanza di trascrizione nel video YouTube, è stato utilizzato il contenuto della pagina per fornire questo riassunto"
+  },
+  "languageHint": {
+    "message": "Lingua",
+    "description": "Hint text shown when language selector is not available"
+  },
+  "languageNotAvailable": {
+    "message": "Aggiungi {{SELECTED_LANGUAGE}} al modello per abilitare",
+    "description": "Tooltip explaining why language selector is disabled"
+  },
+  "updateSuccess": {
+    "message": "Update Successful! 🎉"
+  },
+  "whatsNew": {
+    "message": "What's new?"
+  },
+  "updatePoint1": {
+    "message": "Improved performance and stability when summarizing long texts."
+  },
+  "updatePoint2": {
+    "message": "Support for the latest AI models."
+  },
+  "updatePoint3": {
+    "message": "General bug fixes and UI adjustments."
+  },
+  "safeAiUpload": {
+    "message": "Secure AI Upload"
+  },
+  "redactifyTitle": {
+    "message": "Redact documents before summarizing"
+  },
+  "redactifyDesc": {
+    "message": "Do not upload sensitive data to ChatGPT! Redactify automatically makes PDFs and images safe for AI usage."
+  },
+  "redactifyPoint1": {
+    "message": "100% Offline & Local on Mac"
+  },
+  "redactifyPoint2": {
+    "message": "Detects IBANs, names, emails & addresses"
+  },
+  "downloadMacAppStore": {
+    "message": "Download on the Mac App Store"
+  },
+  "downloadIOSAppStore": {
+    "message": "Download for iPhone/iPad"
+  }
+}
