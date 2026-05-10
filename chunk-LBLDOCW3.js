@@ -12,40 +12,70 @@ async function safeJson(response){
   catch(e){console.error("[safeJson] JSON parse failed:",text.slice(0,300));throw new Error("Server returned invalid response")}
 }
 
-// ── Message helpers ───────────────────────────────────────────────────────────
-function sendBgMessage(type,extra={}){
+// ── Read status/token DIRECTLY from storage — no sendMessage ───────────────────
+var f=c(E()); // browser polyfill
+
+async function getDeepSeekStatus(){
+  // Primary: read from storage (written by SW on every cookie change + startup)
+  try{
+    const stored=await f.default.storage.local.get(['_dsStatus']);
+    const s=stored['_dsStatus'];
+    if(s&&typeof s.loggedIn!=='undefined'){
+      console.log('[DeepSeek UI] status from storage:',s);
+      return{loggedIn:Boolean(s.loggedIn),cookieCount:Number(s.cookieCount)||0,error:null};
+    }
+  }catch(e){
+    console.warn('[DeepSeek UI] storage read failed:',e);
+  }
+  // Fallback: sendMessage (first-run before SW has written to storage)
   return new Promise((resolve)=>{
     try{
-      chrome.runtime.sendMessage({type,...extra},response=>{
+      chrome.runtime.sendMessage({type:'GET_DEEPSEEK_STATUS'},response=>{
         if(chrome.runtime.lastError){
-          console.warn('[DeepSeek] sendMessage error ('+type+'):',chrome.runtime.lastError.message);
-          resolve(null);
+          console.warn('[DeepSeek UI] sendMessage fallback error:',chrome.runtime.lastError.message);
+          resolve({loggedIn:false,cookieCount:0});
           return;
         }
-        resolve(response||null);
+        console.log('[DeepSeek UI] sendMessage fallback response:',response);
+        if(!response) resolve({loggedIn:false,cookieCount:0});
+        else resolve({loggedIn:Boolean(response.loggedIn),cookieCount:Number(response.cookieCount)||0,error:response.error||null});
       });
     }catch(e){
-      console.warn('[DeepSeek] sendBgMessage failed ('+type+'):',e);
-      resolve(null);
+      console.warn('[DeepSeek UI] sendMessage fallback threw:',e);
+      resolve({loggedIn:false,cookieCount:0});
     }
   });
 }
 
-function getDeepSeekCookies(){return sendBgMessage('GET_DEEPSEEK_COOKIES').then(r=>r?.cookieStr||null);}
-function getDeepSeekStatus(){
-  return sendBgMessage('GET_DEEPSEEK_STATUS').then(r=>{
-    console.log('[DeepSeek UI] raw GET_DEEPSEEK_STATUS response:',r);
-    // Defensive: handle null (SW didn't respond), string "true", or proper object
-    if(!r) return{loggedIn:false,cookieCount:0};
-    return{
-      loggedIn: Boolean(r.loggedIn),
-      cookieCount: Number(r.cookieCount)||0,
-      error: r.error||null,
-      sessionCookieName: r.sessionCookieName||null,
-    };
+async function getDeepSeekToken(){
+  // Read directly from storage
+  try{
+    const stored=await f.default.storage.local.get(['deepseek-token']);
+    if(stored['deepseek-token'])return stored['deepseek-token'];
+  }catch(e){
+    console.warn('[DeepSeek UI] token storage read failed:',e);
+  }
+  // Fallback: sendMessage
+  return new Promise((resolve)=>{
+    try{
+      chrome.runtime.sendMessage({type:'GET_DEEPSEEK_TOKEN'},response=>{
+        if(chrome.runtime.lastError){resolve(null);return;}
+        resolve(response?.token||null);
+      });
+    }catch(e){resolve(null);}
   });
 }
-function getDeepSeekToken(){return sendBgMessage('GET_DEEPSEEK_TOKEN').then(r=>r?.token||null);}
+
+function getDeepSeekCookies(){
+  return new Promise((resolve)=>{
+    try{
+      chrome.runtime.sendMessage({type:'GET_DEEPSEEK_COOKIES'},response=>{
+        if(chrome.runtime.lastError){resolve(null);return;}
+        resolve(response?.cookieStr||null);
+      });
+    }catch(e){resolve(null);}
+  });
+}
 
 async function C(e,t){
   if(!t)throw new Error("No token provided");
@@ -65,14 +95,9 @@ function p(e,t,r){
 function R(e,t){let r=N.getConfig(t);return p(e,e?r.modelsUrl:null,r.mapModelsResponse)}
 
 var a=c(E()),m=c(w());
-var f=c(w());
 var s=c(h());
 
 async function getToken(){
-  try{
-    const stored=await f.default.storage.local.get(["deepseek-token"]);
-    if(stored["deepseek-token"])return stored["deepseek-token"];
-  }catch(e){console.warn('[DeepSeek] storage read failed',e);}
   return await getDeepSeekToken();
 }
 
@@ -85,14 +110,12 @@ function D({onLoginStatusChange:e,callback:t}){
     setChecking(true);
     try{
       const st=await getDeepSeekStatus();
-      console.log('[DeepSeek UI] checkStatus result:',st);
+      console.log('[DeepSeek UI] checkStatus:',st);
       setStatus(st);
-
       if(st&&st.loggedIn){
         const token=await getToken();
         if(token){
           setTokenInfo({found:true,preview:token.slice(0,12)+'...'});
-          try{await f.default.storage.local.set({'deepseek-token':token});}catch{}
           e&&e(true);
           t&&t();
         }else{
@@ -112,22 +135,41 @@ function D({onLoginStatusChange:e,callback:t}){
     }
   },[e,t]);
 
+  // Auto-check on mount
   (0,a.useEffect)(()=>{checkStatus();},[]);
 
+  // ← NEW: also watch storage for real-time updates (cookie change → SW writes → UI reacts)
+  (0,a.useEffect)(()=>{
+    function onStorageChange(changes,area){
+      if(area!=='local')return;
+      if(changes['_dsStatus']){
+        const s=changes['_dsStatus'].newValue;
+        if(s&&typeof s.loggedIn!=='undefined'){
+          const next={loggedIn:Boolean(s.loggedIn),cookieCount:Number(s.cookieCount)||0,error:null};
+          console.log('[DeepSeek UI] storage update detected:',next);
+          setStatus(next);
+          if(next.loggedIn){e&&e(true);}else{setTokenInfo(null);e&&e(false);}
+        }
+      }
+    }
+    try{chrome.storage.onChanged.addListener(onStorageChange);}catch{}
+    return()=>{
+      try{chrome.storage.onChanged.removeListener(onStorageChange);}catch{}
+    };
+  },[e]);
+
   const handleDisconnect=(0,a.useCallback)(async()=>{
-    try{await f.default.storage.local.remove(['deepseek-token','deepseek-login','deepseek-password']);}catch{}
+    try{await f.default.storage.local.remove(['deepseek-token','deepseek-login','deepseek-password','_dsStatus']);}catch{}
     setStatus({loggedIn:false,cookieCount:0});
     setTokenInfo(null);
     e&&e(false);
   },[e]);
 
-  // ── Loading state ──
   if(status===null){
     return(0,s.jsxs)("div",{className:"flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400",
       children:[(0,s.jsx)(x,{style:"h-4 w-4"})," Checking DeepSeek session\u2026"]})
   }
 
-  // ── Connected ──
   if(status.loggedIn){
     return(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[
       (0,s.jsxs)("div",{className:"flex items-center gap-2 rounded-md bg-green-50 dark:bg-green-900/30 px-3 py-2 text-green-700 dark:text-green-400",children:[
@@ -138,12 +180,10 @@ function D({onLoginStatusChange:e,callback:t}){
       ]}),
       !tokenInfo?.found&&(0,s.jsxs)("p",{className:"text-xs text-amber-600 dark:text-amber-400",
         children:["\u26a0\ufe0f ",tokenInfo?.hint||"Open ",
-          (0,s.jsx)("a",{href:"https://chat.deepseek.com",target:"_blank",rel:"noopener noreferrer",
-            className:"underline",children:"chat.deepseek.com"}),
+          (0,s.jsx)("a",{href:"https://chat.deepseek.com",target:"_blank",rel:"noopener noreferrer",className:"underline",children:"chat.deepseek.com"}),
           " and keep a tab open so the extension can read your session token."
         ]}),
-      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",
-        children:"Your DeepSeek browser session is used automatically. No login required."}),
+      (0,s.jsx)("p",{className:"text-xs text-gray-500 dark:text-gray-400",children:"Your DeepSeek browser session is used automatically. No login required."}),
       (0,s.jsxs)("div",{className:"flex items-center gap-2",children:[
         (0,s.jsx)("button",{type:"button",onClick:checkStatus,disabled:checking,
           className:"items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 disabled:opacity-50",
@@ -155,7 +195,6 @@ function D({onLoginStatusChange:e,callback:t}){
     ]})
   }
 
-  // ── Not connected ──
   return(0,s.jsxs)("div",{className:"flex flex-col gap-3 text-sm",children:[
     (0,s.jsxs)("div",{className:"flex items-center gap-2 rounded-md bg-orange-50 dark:bg-orange-900/30 px-3 py-2 text-orange-700 dark:text-orange-400",children:[
       (0,s.jsx)("span",{className:"inline-block h-2.5 w-2.5 rounded-full bg-orange-400 flex-shrink-0"}),
