@@ -1,6 +1,12 @@
 (function () {
   'use strict';
 
+  // ── Extension context guard ─────────────────────────────────────────────────
+  function isCtxValid() {
+    try { return !!(chrome && chrome.runtime && chrome.runtime.id); }
+    catch (e) { return false; }
+  }
+
   // Auto-save summary via clipboard intercept + DOM scrape
   let lastSavedText = null;
   let autoClickDone = false;
@@ -75,11 +81,24 @@
 
   function downloadText(text) {
     if (!text || text === lastSavedText) return;
+    // Guard: do not call chrome APIs if extension context has been invalidated
+    if (!isCtxValid()) {
+      console.warn('[auto-save] Extension context invalidated — download suppressed.');
+      return;
+    }
     lastSavedText = text;
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    chrome.downloads.download({ url, filename: 'summaries/summary-' + timestamp + '.txt', saveAs: false }, () => URL.revokeObjectURL(url));
+    try {
+      chrome.downloads.download(
+        { url, filename: 'summaries/summary-' + timestamp + '.txt', saveAs: false },
+        () => URL.revokeObjectURL(url)
+      );
+    } catch (e) {
+      console.warn('[auto-save] chrome.downloads.download failed:', e.message);
+      URL.revokeObjectURL(url);
+    }
   }
 
   let debounce = null;

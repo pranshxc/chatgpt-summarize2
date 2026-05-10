@@ -1,52 +1,63 @@
 /**
  * runtime-patch.js
- * Injected FIRST in popup/index.html before any other scripts.
+ * Injected FIRST (before index.js module) in popup/index.html.
  *
- * Fixes all three console errors:
+ * WHY THIS IS NEEDED:
+ * Chrome extensions can have their context invalidated when the extension is
+ * reloaded/updated while a popup page is still open. Any call to chrome.*
+ * APIs after that point throws "Extension context invalidated".
  *
- * 1. "Extension context invalidated"
- *    Wraps chrome.runtime.sendMessage and chrome.runtime.onMessage so that
- *    calls after the extension is reloaded silently no-op instead of throwing.
+ * IMPORTANT: index.js is a type="module" script. ES modules evaluate
+ * synchronously after parsing but AFTER all classic scripts in the same
+ * document have run. This means patching chrome.* here (a classic script)
+ * takes effect BEFORE the module bundle runs.
+ * However, the module bundle captures references like:
+ *   const rt = chrome.runtime;   // captured once at module eval time
+ * Those captured references still go through the same underlying API object,
+ * so patching chrome.runtime.sendMessage on the global still intercepts them.
  *
- * 2. "The dismiss element with id '#alert-border-3' does not exist"
- *    Patches document.querySelector / getElementById so Flowbite's Dismiss
- *    never throws when the target element is absent.
- *
- * 3. "Login error SyntaxError: Failed to execute 'json' on 'Response'"
- *    Patches Response.prototype.json so an empty body returns null
- *    instead of throwing.
+ * Fixes:
+ * 1. Extension context invalidated (sync & async)
+ * 2. Flowbite dismiss element missing (#alert-border-3)
+ * 3. Response.json() on empty body (Login error)
  */
 (function () {
   'use strict';
 
-  // ── 1. Extension context guard ───────────────────────────────────────────
+  // ───────────────────────────────────────────────────────────────────────────
+  // HELPER
+  // ───────────────────────────────────────────────────────────────────────────
   function isCtxValid() {
     try { return !!(chrome && chrome.runtime && chrome.runtime.id); }
     catch (e) { return false; }
   }
 
+  // ───────────────────────────────────────────────────────────────────────────
+  // 1. chrome.runtime patches
+  // ───────────────────────────────────────────────────────────────────────────
   if (typeof chrome !== 'undefined' && chrome.runtime) {
-    // Patch sendMessage
+
+    // --- sendMessage ---
     var _sendMessage = chrome.runtime.sendMessage.bind(chrome.runtime);
     chrome.runtime.sendMessage = function () {
       if (!isCtxValid()) {
-        console.warn('[runtime-patch] Extension context invalidated — sendMessage suppressed.');
-        var cb = arguments[arguments.length - 1];
-        if (typeof cb === 'function') cb(null);
+        console.warn('[runtime-patch] Context invalidated — sendMessage suppressed.');
+        var lastArg = arguments[arguments.length - 1];
+        if (typeof lastArg === 'function') lastArg(undefined);
         return;
       }
       try {
         return _sendMessage.apply(chrome.runtime, arguments);
       } catch (e) {
         if (e.message && e.message.includes('Extension context invalidated')) {
-          console.warn('[runtime-patch] sendMessage caught context error:', e.message);
+          console.warn('[runtime-patch] sendMessage caught context error.');
           return;
         }
         throw e;
       }
     };
 
-    // Patch onMessage.addListener so handlers auto-guard themselves
+    // --- onMessage.addListener ---
     var _addListener = chrome.runtime.onMessage.addListener.bind(chrome.runtime.onMessage);
     chrome.runtime.onMessage.addListener = function (handler) {
       _addListener(function (msg, sender, sendResponse) {
@@ -58,7 +69,7 @@
           return handler(msg, sender, sendResponse);
         } catch (e) {
           if (e.message && e.message.includes('Extension context invalidated')) {
-            console.warn('[runtime-patch] Context error inside handler:', e.message);
+            console.warn('[runtime-patch] Context error inside message handler.');
             return false;
           }
           throw e;
@@ -66,40 +77,25 @@
       });
     };
 
-    // Patch storage.local.get / set to guard context
-    if (chrome.storage && chrome.storage.local) {
-      var _storageGet = chrome.storage.local.get.bind(chrome.storage.local);
-      var _storageSet = chrome.storage.local.set.bind(chrome.storage.local);
-
-      chrome.storage.local.get = function (keys, cb) {
+    // --- connect (long-lived ports) ---
+    if (chrome.runtime.connect) {
+      var _connect = chrome.runtime.connect.bind(chrome.runtime);
+      chrome.runtime.connect = function () {
         if (!isCtxValid()) {
-          console.warn('[runtime-patch] Context invalidated — storage.get suppressed.');
-          if (typeof cb === 'function') cb({});
-          return;
+          console.warn('[runtime-patch] Context invalidated — connect suppressed.');
+          // Return a dummy port so callers don’t crash on .postMessage
+          return {
+            postMessage: function () {},
+            disconnect: function () {},
+            onMessage: { addListener: function () {}, removeListener: function () {} },
+            onDisconnect: { addListener: function () {}, removeListener: function () {} },
+          };
         }
-        try { return _storageGet(keys, cb); }
+        try { return _connect.apply(chrome.runtime, arguments); }
         catch (e) {
           if (e.message && e.message.includes('Extension context invalidated')) {
-            console.warn('[runtime-patch] storage.get context error:', e.message);
-            if (typeof cb === 'function') cb({});
-            return;
-          }
-          throw e;
-        }
-      };
-
-      chrome.storage.local.set = function (data, cb) {
-        if (!isCtxValid()) {
-          console.warn('[runtime-patch] Context invalidated — storage.set suppressed.');
-          if (typeof cb === 'function') cb();
-          return;
-        }
-        try { return _storageSet(data, cb); }
-        catch (e) {
-          if (e.message && e.message.includes('Extension context invalidated')) {
-            console.warn('[runtime-patch] storage.set context error:', e.message);
-            if (typeof cb === 'function') cb();
-            return;
+            console.warn('[runtime-patch] connect caught context error.');
+            return { postMessage:function(){}, disconnect:function(){}, onMessage:{addListener:function(){},removeListener:function(){}}, onDisconnect:{addListener:function(){},removeListener:function(){}} };
           }
           throw e;
         }
@@ -107,40 +103,118 @@
     }
   }
 
-  // ── 2. Flowbite Dismiss element guard ────────────────────────────────────
-  // Flowbite reads data-dismiss-target and calls document.querySelector(id).
-  // If the element doesn't exist it logs an error. We patch the Dismiss init
-  // by overriding document.querySelector to return null safely (it already
-  // does), BUT the real issue is Flowbite throws internally. We override the
-  // global error handler for this specific message.
-  var _origQuerySelector = document.querySelector.bind(document);
-  document.querySelector = function (selector) {
-    try {
-      return _origQuerySelector(selector);
-    } catch (e) {
-      console.warn('[runtime-patch] document.querySelector failed for:', selector, e.message);
-      return null;
+  // --- chrome.storage ---
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    var _storageGet = chrome.storage.local.get.bind(chrome.storage.local);
+    var _storageSet = chrome.storage.local.set.bind(chrome.storage.local);
+
+    chrome.storage.local.get = function (keys, cb) {
+      if (!isCtxValid()) {
+        console.warn('[runtime-patch] Context invalidated — storage.get suppressed.');
+        if (typeof cb === 'function') cb({});
+        return;
+      }
+      try { return _storageGet(keys, cb); }
+      catch (e) {
+        if (e.message && e.message.includes('Extension context invalidated')) {
+          console.warn('[runtime-patch] storage.get context error.');
+          if (typeof cb === 'function') cb({});
+          return;
+        }
+        throw e;
+      }
+    };
+
+    chrome.storage.local.set = function (data, cb) {
+      if (!isCtxValid()) {
+        console.warn('[runtime-patch] Context invalidated — storage.set suppressed.');
+        if (typeof cb === 'function') cb();
+        return;
+      }
+      try { return _storageSet(data, cb); }
+      catch (e) {
+        if (e.message && e.message.includes('Extension context invalidated')) {
+          console.warn('[runtime-patch] storage.set context error.');
+          if (typeof cb === 'function') cb();
+          return;
+        }
+        throw e;
+      }
+    };
+  }
+
+  // --- chrome.downloads (used by auto-save.js) ---
+  if (typeof chrome !== 'undefined' && chrome.downloads) {
+    var _dlDownload = chrome.downloads.download.bind(chrome.downloads);
+    chrome.downloads.download = function (options, cb) {
+      if (!isCtxValid()) {
+        console.warn('[runtime-patch] Context invalidated — downloads.download suppressed.');
+        if (typeof cb === 'function') cb();
+        return;
+      }
+      try { return _dlDownload(options, cb); }
+      catch (e) {
+        if (e.message && e.message.includes('Extension context invalidated')) {
+          console.warn('[runtime-patch] downloads.download context error.');
+          if (typeof cb === 'function') cb();
+          return;
+        }
+        throw e;
+      }
+    };
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 2. Unhandled rejection + window.onerror catch-all for context errors
+  // ───────────────────────────────────────────────────────────────────────────
+  window.addEventListener('unhandledrejection', function (event) {
+    var reason = event.reason;
+    if (reason && typeof reason.message === 'string' &&
+        reason.message.includes('Extension context invalidated')) {
+      console.warn('[runtime-patch] Suppressed unhandled rejection: Extension context invalidated');
+      event.preventDefault();
     }
+  });
+
+  window.addEventListener('error', function (event) {
+    if (event.error && typeof event.error.message === 'string' &&
+        event.error.message.includes('Extension context invalidated')) {
+      console.warn('[runtime-patch] Suppressed error event: Extension context invalidated');
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+
+  var _origOnerror = window.onerror;
+  window.onerror = function (msg) {
+    if (typeof msg === 'string' && msg.includes('Extension context invalidated')) {
+      console.warn('[runtime-patch] Suppressed window.onerror: Extension context invalidated');
+      return true;
+    }
+    if (_origOnerror) return _origOnerror.apply(window, arguments);
+    return false;
   };
 
-  // Suppress the specific Flowbite "does not exist" console.error
+  // ───────────────────────────────────────────────────────────────────────────
+  // 3. Flowbite Dismiss missing-element guard
+  // ───────────────────────────────────────────────────────────────────────────
   var _origConsoleError = console.error.bind(console);
   console.error = function () {
     var msg = arguments[0];
-    if (typeof msg === 'string' && msg.includes('does not exist') && msg.includes('data-dismiss-target')) {
-      // Downgrade to a warning so it doesn't look like a crash
+    if (typeof msg === 'string' &&
+        msg.includes('does not exist') &&
+        msg.includes('data-dismiss-target')) {
       console.warn('[runtime-patch] Dismiss target missing (suppressed error):', msg);
       return;
     }
     return _origConsoleError.apply(console, arguments);
   };
 
-  // ── 3. Response.prototype.json empty-body guard ──────────────────────────
-  var _origJson = Response.prototype.json;
+  // ───────────────────────────────────────────────────────────────────────────
+  // 4. Response.prototype.json empty-body guard
+  // ───────────────────────────────────────────────────────────────────────────
   Response.prototype.json = function () {
-    var self = this;
-    // Clone so we can read text without consuming the body
-    return self.clone().text().then(function (text) {
+    return this.clone().text().then(function (text) {
       if (!text || !text.trim()) {
         console.warn('[runtime-patch] Response.json(): empty body — returning null.');
         return null;
@@ -152,27 +226,6 @@
         return null;
       }
     });
-  };
-
-  // ── 4. Global unhandled promise rejection suppressor for context errors ──
-  window.addEventListener('unhandledrejection', function (event) {
-    var reason = event.reason;
-    if (reason && typeof reason.message === 'string' &&
-        reason.message.includes('Extension context invalidated')) {
-      console.warn('[runtime-patch] Suppressed unhandled rejection: Extension context invalidated');
-      event.preventDefault();
-    }
-  });
-
-  // Also catch sync throws
-  var _origOnerror = window.onerror;
-  window.onerror = function (msg, src, line, col, err) {
-    if (typeof msg === 'string' && msg.includes('Extension context invalidated')) {
-      console.warn('[runtime-patch] Suppressed window.onerror: Extension context invalidated');
-      return true; // prevent default browser error logging
-    }
-    if (_origOnerror) return _origOnerror.apply(window, arguments);
-    return false;
   };
 
 })();
